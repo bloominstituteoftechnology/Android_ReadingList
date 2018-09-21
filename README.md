@@ -133,3 +133,6 @@ A model, like a repository in MVVM architecture is in charge of managing the dat
 7. In the `onActivityResult` method, you will now check the requestCode and the resultCode and call the `handleEditActivityResult` method, passing it the `Intent` object.
 8. In the `onCreate` method, you will now get a handle to the `ScrollView` and then call the `getBooksView` and pass that result to the `ScrollView`'s `addView` method.
 9. Test the app
+
+#### Challenge
+In your testing, find bugs and small feature improvements that can improve the polish of your app.
