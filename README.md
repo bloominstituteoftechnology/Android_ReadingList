@@ -1,193 +1,134 @@
 # Reading List
 
-### Notes
-- Architecture
- - Store IDs as CSV string
- - Retreive books with ID as another CSV String
- - Constructors to parse string
- - Title, read (bool), notes, ID (stored in first value)
-- Process
-  - pull ids
-  - use ids to pull and parse each book
-  - add books to unread/read arraylist
-  - pass book id in intent to next screen
-  - retreive book again and display
-  - have add book button in bottom right (perhaps use basic activity template)
-
-### iOS Version
-
-A student that completes this project shows that they can:
-
-- understand and explain the role of model objects and model controllers in MVC
-- make a class or struct conform to Codable
-- use FileManager to find system directories (e.g. documents directory)
-- use PropertyListEncoder to save Codable objects to a file
-
 ## Introduction
 
 Reading List is an application that lets you save a list of books and allow you to mark whether you have or have not read them. Since this application will use persistence, the books you create and check as read or not will be saved between launches of the application.
 
 Please look at the screen recording below to know what the finished project should look like:
 
-![](https://user-images.githubusercontent.com/16965587/43476440-d31883ac-94b5-11e8-89f9-c83f30099e69.gif)
+![]()
 
 ## Instructions
 
-Please fork and clone this repository. This repository comes with a started Xcode project that includes images that you will need.
+### Part 1 - Front End
 
-### Part 1 - Book and BookController
+For this project, we'll be using a top-down coding process. The advantage of doing this is that we can have an app that a user can interact with and then you can add functionality behind it.  
 
-#### Book
+#### Book  
+1. Create a "Book.java" file. Create a struct called `Book`  
+2. This struct should have the following properties:  
+    - A `title` String  
+    - A `reasonToRead` String  
+    - A `hasBeenRead` boolean  
+    - An `id` String  
+3. Create two constructors.  
+    a. One that accepts and assigns all data members  
+    b. One that parses a CSV string to an object  
+4. Write getters for each of the data members  
+5. Write a `toCsvString` method to convert the object to a CSV string  
+> Make sure your CSV constructor and CSV output methods match formatting  
 
-1. Create a "Book.swift" file. Create a struct called `Book`
-2. This struct should have the following properties:
-    - A `title` String
-    - A `reasonToRead` String
-    - A `hasBeenRead` Bool
-3. Create an initializer for the struct so that you can give a default value of `false` to the `hasBeenRead` parameter.
-4. Adopt both the `Equatable`, and `Codable` protocols.
+#### MainActivity  
+1. Build your `MainActivity` layout file with a `ScrollView` and a `Button`  
+> Make sure the `ScrollView` has a `ViewGroup` child with an id for you to add views to   
 
-#### BookController
+2. Write a `buildItemView` method which will accept a `Book` object and return a custom view to display information about the book.  
+> Typically these views will just show the title of the book. In the next couple weeks, we'll show you how to define custom layouts for lists  
 
-Up until now, the model controllers you've made have been more or less the same, where they just have CRUD methods, and an array of your model object. Now however since you will be implementing a form of persistence, the model controller gets another responsibility which is to make sure that when a `Book` changes (whether by creating a new one, deleting once, or changing one), those changes are saved and persisted. It would be weird if the user deletes a `Book`, then the next time they open the app, the book is magically there again.
+3. Hardcode a list of `Book` objects to test your methods. Be sure to add all views returned from your `buildItemView` method to the `ScrollView`'s child using `.addView(View)`  
+4. Test your app.  
 
- 1. Create a "BookController.swift" file, and create a `BookController` class inside of it.
- 2. Add a variable called `books` and set its value to an empty array of `Book` objects.
- 
-Let's prepare the `BookController` to handle saving and loading from the persistent store. First of all, `Codable` is the main driving force behind this form of persistence. It allows us to convert `Book` objects to Property-List form and back to `Book`s. We need a place to save this property list on the device's hard drive. 
+#### EditBookActivity  
+1. Add a new empty activity called `EditBookActivity`  
+2. Add fields to edit information stored in the `Book` object  
+3. Add attributes to the fields to make the layout look good.  
+4. Go into the `AndroidManifext` file and move the `intent-filter` block to your new activity.  
+5. Build your app and test the new Activity.  
+6. Return the `intent-filter` block to your `MainActivity`  
 
-3. Create a computed property called `readingListURL: URL?`. Inside of the computed property, you should:
-    - Get the user's document directory using the `FileManager` class.
-    - Create a filename string for the plist, such as "ReadingList.plist"
-    - Return a url that appends the filename string to the document directory. In doing this, you will create a full path wherein the `Book`s in plist form will be stored on the user's device.
-4. Create a function called `saveToPersistentStore()`. This function will be responsible for saving any changes to any `Book` object so that the changes will still be there when the user comes back into the application. You can implement this by doing the following:
-    - Create an instance of `PropertyListEncoder`. 
-    - Inside of a do-try-catch block create a constant called `booksData`. Using the `encode(value: ...)` function of the property list encoder, encode the `books` array into `Data`.
-    - Call the `write(to: URL)` function on the data you encoded computed property. The url you pass in should be an unwrapped version of the `readingListURL` property.
-5. Create a function called `loadFromPersistentStore()`. This function will be responsible for grabbing the property list stored on the device, and converting the information in it back into an array of `Book` objects so the application may display them on the table view, etc. To implement this:
-    - Inside of a do-try-catch- block, unwrap the `readingListURL` property.
-    - Still inside of the block, use the `Data(contentsOf: URL)` initializer to get access to the property list form of the books. Assign this data you initialize to a constant.
-    - Initialize a `PropertyListDecoder` and assign it to a constant.
-    - Create a constant called `decodedBooks`. Set its value by calling the `decode` method on the property list decoder you just created, and passing in the type it should be decoded as, and the data constant you made a couple steps ago. (Hint: the type parameter to this function should be `[Book].self`)
-    - Set the value of the `books` property in the `BookController` to the `decodedBooks` you just made.
-    - In the catch block, you should make an error message that is descriptive of what happened
+#### Link the Activities
+Now that you have built both activities. You'll need to link the two activities and pass data between them.  
+1. In your `MainActivity` add an `onClickListener` to your button  
+2. In the listener create a new `Intent` passing in the current `Context` and the `EditBookActivity.class`  
+3. Call `startActivity()` with your new `Intent`  
+4. Build and Run your app to test that the button now navigates to the `EditBookActivity`  
 
-6. Like always, we will need to make CRUD methods. As we're using a form of persistence, **be sure to call `saveToPersistentStore()` at the end of each of these or the changes will not persist**:
-    - Add a "Create" method that initializes a new `Book` object. In order to persist the newly created `Book`, call the `saveToPersistentStore()` method at the end of this function.
-    - Add a "Delete" method that passes in a `Book` object as a parameter, and removes it from the `books` array.
-    - We'll need two "Update" methods: 
-      -  One is to update a `Book` object's `hasBeenRead` property. Call it `updateHasBeenRead(for book: Book)`. It should simply swap the `hasBeenRead` value from `false` to `true` and vice-versa. 
-      - The other is to edit the `Book`'s `title` and/or `reasonToRead` properties.
+#### Pass Data Between Activities
+Now that the activity can be launched, it needs data. We have two unique use cases that we'll have to deal with.  
+A. New Entry  
+​    1. Use `putExtra` to add a new id value to pass to the `EditBookActivity`  
+   > For now, you can use the method `getChildCount` to use the item count as a unique id  
 
-You may have noticed from the screen recording that the table view is going to have more than one section. In order to facilitate the implementation of this multi-section table view, we're going to add a couple computed properties to the `BookController`:
+​    2. In the `onCreate` method of the `EditBookActivity` use `getIntent().getStringExtra()` to get the passed id  
+B. Edit Entry  
+​    1. In your `buildItemView`, give the created item an `onClickListener`  
+​    2. This `onClickListener` must create an `Intent` just like the button, but this one will add the `Book` as a CSV string to the `Intent`  
+C. Accept Data  
+​    Now that we have data in the `Intent`, we need to get it from the `Intent`  
+​    1. In the `onCreate` method of your `EditBookActivity` use `getIntent()` to get a handle on the `Intent`  
+​    2. Use `getExtra` and pass it your tag for id to pull the id from the `Intent`
+​    3. Use `getStringExtra` to get your `Book` which was encoded as a CSV string
+​    4. If your `Book` string isn't null, use it to build a `Book` object and pull the components from it.
+​    5. Add your data as text to your `EditText` fields.
 
-7. Create a computed property called `readBooks: [Book]`. Inside of the closure of the computed property, you will need to return an array of all of the `Book` objects from the `books` array whose `hasBeenRead` property is true. The easiest way to do that is by using the `.filter` higher-order function. If you are unfamiliar with this function, read the part of [this article](https://useyourloaf.com/blog/swift-guide-to-map-filter-reduce/) titled "Filter". If you still have questions, please ask in the help channel for your cohort, and a PM will explain it to you in more depth.
-8. Create a similar computed property called `unreadBooks: [Book]` that does the same thing, except it returns an array of `Book`s whose `hasBeenRead` property is `false`.
+#### Return Data
+Once your `EditTextActivity` can accept and process data, it needs to return that data back to the `MainActivity`.
+1. Write a method called `returnData` which will pull the information from all the edit fields, use it to build a `Book` object, and convert the `Book` to a CSV string.
+2. Create a new `Intent` and use `setResult`with `RESULT_OK` to add the CSV string to the intent
+3. Call `finish()` to complete the activity and return.
+4. Override the `onBackPressed()` method to intercept when the user presses the back button and call your `returnData`
+5. Add two buttons, one as a submit and one as a cancel.
+6. In the submit button's `onClickListener` call your `returnData` method
+7. For the cancel button write a new method that functions similarly to `returnData` but doesn't pull data from the UI and uses `setResult` with `RESULT_CANCELED` instead
+9. In your `MainActivity`, change your calls to `startActivity` to `startActivityForResult` and pass in a constant tag representing which result you will be looking for.
+10. Override the `onActivityResult` method to get the returned data
+11. Check first that the result code is `RESULT_OK` then check for the result tag to match the one you passed in
+12. Use `getStringExtra` to grab the string from the provided `Intent`
+13. Parse the CSV string into a `Book` object
+14. Add the book object to your list of books
+> Check to see if the id of the book in question already exists, if so, update that entry instead of adding a new one  
 
-### Part 2 - Storyboard Scenes
+15. Update the UI with the new list
+16. Test your app
 
-The layout of this application uses a simple master-detail interface.
+#### Write the Data Access Object for SharedPreferences
+Now that we have a functioning app, we need to add our persistence to it. To do this using `SharedPreferences`, we'll store our objects as strings by their id. We will also store a list of active objects in a list of ids. Finally, we'll store a single id value representing the next id to be used
+1. Create a `SharedPreferences` data member called `preferences` in your `MainActivity`
+2. In the `onCreate` method of that activity, use `this.getSharedPreferences` to store a handle to the activity's `SharedPreferences` object in your `preferences` member.
+> This isn't the safest way to access `SharedPreferences` but it works for a simple app like this. Be sure to check if `preferences` is null before trying to access it.
 
-1. Drag out a `UITableViewController` scene, and embed it in a navigation controller. Set the navigation controller as the initial view controller. Then, drag out a `UIViewController` scene that will serve as the detail view controller.
-2. Set the table view controller's title to be "Reading List"
-3. In the table view's cell: 
-    - Set its style to "Custom" if it isn't already.
-    - Add a label that will show the title of the book.
-    - Add a button that will be used to show images of a checked or unchecked checkbox, indicating whether the book has been read or not. Remove the button's title.
-    - Constrain these UI elements to the cell's content view. You may use a stack view, or constrain them individually. The checkbox button should have a 1:1 aspect ratio. 
-      - **NOTE:** After adding the constraints, a way to make sure the constraints on the button are correct is to set its image property to the checked or unchecked images using the Attributes Inspector. If the constraints are correct, the image should be square, and also not expand off the button.
-      - Create a show segue from the cell to the detail view controller. Give the segue an identifier
-4. Add a bar button item in the top-right corner of the table view controller. Set its "System Item" to "Add". Create a segue from it to the detail view controller. Give the segue an identifier.
-5. Create a Cocoa Touch subclass for both the table view controller and the custom `UITableViewCell`. Call the `UITableViewController` subclass `ReadingListTableViewController`, and the `UITableViewCell` subclass `BookTableViewCell`. Set the table view controller and cell's class in the Identity inspector. 
-6. In the custom cell class, create outlets from the label and button, and an action from the button as well.
+3. Pass in a `Constant String` value as the `SharedPreferences` name and `MODE_PRIVATE` as its access mode.
+4. Create a class called `SharedPrefsDao`, all members of this class will be static
+5. Create constant keys for id list retreival and next id retreival.
+6. Create methods that use these keys to return `String`s which are retreived from `SharedPreferences`. These methods should be named `getAllBookIds` and `getNextId`
+> These are methods which will simply return the value given when calling `MainActivity.preferences.getString()` and passing in the right key
 
-Now we'll set up the detail view controller. This view controller will serve two purposes. First, it will be used to add new books to the reading list. The second is to view an existing book's information and potentially edit it.
+7. Create a method that will accept a `Book`'s id and return the `Book` CSV string
+8. Create a method to store a book called `updateBook`which accepts a single `Book` object
+9. This method will check to see if the provided book is new or an updated version of the same book, if it is new, it will add the id to the list of active ids and increment the next id. The method will then store the book using its id as the key.
+10. Build your app to make sure it compiles properly.
 
-5. Add a text field and a text view to the detail view controller scene. They will be used to show, create, and edit a `Book`'s `title` and `reasonToRead` strings respectively. Constrain them with the keyboard in mind so that they won't get covered by it when editing the fields.
-6. Add a navigation item to the detail view controller, then add a bar button item to the top-right corner of the view controller. Set its "System Item" to "Save"
-7. Create a Cocoa Touch Subclass of `UIViewController` called `BookDetailViewController` and set this view controller's class to it in the Identity Inspector.
-8. Add outlets from the text field and text view, and an action from the save button.
+#### Write a model to interpret the raw data
+A model, like a repository in MVVM architecture is in charge of managing the data sources and providing a consistent interface to the next layer in the app. In this app, since we only have one data source, it will merely act as a `Facade` that will parse the string data.
+1. Create a new class called `BooksModel`
+2. Write separate methods that will work with yout `SharedPrefsDao` to return the following
+    a. an array of all `Book` objects, accepting no parameters
+    b. a single `Book` object, accepting an id parameter
+    c. the next id to be used, accepting no parameters
+3. Write a method which will pass a `Book` parameter to the `upateBook` method
+4. Build your app to make sure it compiles properly.
 
-### Part 3 - Wiring Everything Up
+#### Write a controller to format the data and communicate with the model
+1. Create a class called `BooksContoller`
+2. Refactor your `buildItemView` method to move it to your new class.
+3. Remove your list of `Book` objects, the loop to build their views, and the `LinearLayout`.
+4. In your `BookController`write a method called `getBooksView`that accepts a `Context` object
+5. In the new method, you'll get the list of book objects from the `BooksModel`, create a new `LinearLayout` object, use `buildItemView` to add view items to it, and return the `LinearLayout` view.
+> use `imageView.getLayoutParams().width= ViewGroup.LayoutParams.MATCH_PARENT;` to set the with to match parent in your list items
 
-#### BookTableViewCell
+6. Write a method called `handleEditActivityResult` which will accept an `Intent` object, pull the returned data from it and use it to update the model.
+> This will replace some of the code in the `onActivityResult` method of your `MainActivity`
 
-1. Add a `var book: Book?` variable to the `BookTableViewCell` class.
-2. If you haven't done so already, create outlets from the label and button, and an action from the button from the storyboard.
-3. Create an `updateViews()` function that takes the values in the `book` property and sets its `title` in the label, and set the button's image to either the checked or unchecked image that are in the assets folder. 
-    - **NOTE:** You may either use image literals or the `UIImage(named: String)` initializer to get access to the checkbox images from the assets folder.
-
-This custom cell will follow the delegate pattern in order to let the table view controller know that the user just tapped the checkbox button indicating they have or haven't read a book.
-
-4. Create a new Swift file called "BookTableViewCellDelegate.swift", and create a protocol with the same name (minus the ".swift", of course).
-5. Add a function called `func toggleHasBeenRead(for cell: BookTableViewCell)`
-6. Back in the `BookTableViewCell` class, add a `weak var delegate: BookTableViewCellDelegate?` variable.
-7. Call the `delegate` property's `toggleHasBeenRead(for cell: ...)` function in the action of the button.
-
-#### ReadingListTableViewController
-
-This table view controller is going to set the table view up to use two sections; one to group all of the read books, and one to group all of the unread books. This is potentially the first time you have used with multiple sections. As always when setting up a table view, we need to use the `numberOfRowsInSection` and `cellForRowAt` methods. However since we want a table view with more than one section, we also need to implement the `numberOfSections(in tableView: ...)` method. Another useful `UITableViewDataSource` method to use when your table view has more than one section is the `titleForHeaderInSection` method that allows us to give a title to each section in order to let the user know how the table view is grouping its cells.
-
-1. Add a `bookController` constant, and set its value to a new instance of `BookController`.
-2. Implement the `numberOfSections(in tableView: ...)`. It should already be in the table view subclass above the `numberOfRowsInSection`. If you've deleted it, simply call it again. This method is very similar to the `numberOfRowsInSection`. It simply wants you to return an `Int` indicating how many sections the table view should have. In this case, **we simply want to return two.**
-3. Implement the `numberOfRowsInSection` next. This time however, since we are using multiple sections, we can't get away with simply returning the `count` of the `books` array, because that holds all of the books in the application. We need to now say, "For my first section (that will display only the **read** books), return the number of read books, and for the second section return the number of unread books." Since the section that the table view is trying to get the number of rows for is passed in as a parameter, we can easily check the section using a conditional statement, and return the correct amount. Use the `readBooks` and `unreadBooks` computed properties in the `bookController` to get the right amount of rows depending on the section. The first section (0) will show the read books, and the second section (1) will show the unread books.
-
-Like any time we set up a table view, we need to get an instance of the model object in order to either set up a cell or delete it when the user uses swipe to delete to remove it from the array. If we had a single section in our table view, in order to get that instance of a `Book` we would do something like this:
-
-``` Swift
-let book = bookController.books[indexPath.row]
-```
-
-However since we have multiple sections, you need to implement some logic similar to that in step 3 where we check the `section` property on the `indexPath` to know which section is being either set up in the `cellForRowAt`, edited in the `commit editingStyle`, etc. **and then** we can use the `indexPath.row` to pull the correct instance of the model object from the correct array. For example, if the user swipes and deletes the second cell in the first section, we need to look in the `readBooks` array because that is the data source for that section. If the cell that was being deleted in the second section, we would use the `unreadBooks` array instead. 
-
-Since you will need to use this logic in multiple places in this table view controller, make a function that will do that logic for you so you don't have to re-write this logic over and over throughout this class. Call the function `func bookFor(indexPath: IndexPath) -> Book`. Try to write it on your own, however you may use the the example function that is hidden right now below:
-
-<details><summary>Example Function</summary>
-<p>
-
-``` Swift
-    private func bookFor(indexPath: IndexPath) -> Book {
-        if indexPath.section == 0 {
-            return bookController.readBooks[indexPath.row]
-        } else {
-            return bookController.unreadBooks[indexPath.row]
-        }
-    }
-```
-
-</p>
-</details>
-
-This function will facilitate the process of getting the correct instance of `Book` every time, while also keeping your code clean by not repeating this same logic all over the table view controller subclass. **Every place you would use `bookController.books[indexPath.row]` to grab an instance of `Book`, simply use the `bookFor(indexPath: ...)` function you just wrote.**
-
-4. Adopt the `BookTableViewCellDelegate` protocol, and add the `toggleHasBeenRead(for cell: ...)` function. The function should call the `BookController`'s `updateHasBeenRead(for: Book)` method. You will need an instance of `Book` to pass in to this function.  At the end of this function, reload the table view.
-    - **HINT:** Think about how to get an `IndexPath` using the cell parameter of the `toggleHasBeenRead(for cell: ...)`. Once you have an `IndexPath`, you can get an instance of `Book` to pass into the update function.
-5. Fill out the `cellForRowAt` function, making sure to set the cell's `delegate` property, or else the delegate relationship between the table view controller and the custom cell will not exist.
-
-6. Fill out the `commit editingStyle` function. You only need to worry about the `.delete` case.
-
-Another function that we can use to help the user know why we have split the data up into sections is the `titleForHeaderInSection` method. This is also a part of the `UITableViewDataSource` protocol. It allows you to return a string that will be put in the header of a section. Similar to the `numberOfRowsInSection` method, you will need to check the `section` parameter of the function, and return a string depending on its value. For example, the title of the first section (0) could be "Read Books" and the title of the second section could be "Unread Books". 
-
-7. Fill out the `titleForHeaderInSection` function, giving each section a unique title.
-
-#### BookDetailViewController
-
-As stated before, the `BookDetailViewController` will function as a way to create a new `Book` or to view/update an existing one, depending on the segue that is triggered.
-
-1. Add a `var bookController: BookController?` variable. Whether the user is creating a new `Book` or updating an existing one, this view controller will need access to the `BookController` to do so.
-2. Add a `var book: Book?` variable. This is going to be nil if the user taps on the plus button to create a new `Book`, or it will actually hold a `Book` object if they are trying to view/update one by segueing when tapping on a cell in the table view.
-3. Be sure that you've added outlets to the text field and text view, and the action from the save button if you haven't done so.
-4. Create an `updateViews()` method. If the `book` variable has a value, it should take its `title` and put it in the text field, and put its `reasonToRead` in the textView. It should also set the title of the view controller to the `book`'s title if there is one, or it should set the title to "Add a new book" if a new book is going to be created.
-5. In the action of the button, it should either call the `createBook` method in the `bookController` if the `book` property is `nil` or call the `update` method in the `bookController` if the `book` property is not nil.
-
-#### Back to the ReadingListTableViewController
-
-Finally, we need to set up the `prepare(for segue: ...)` in order to pass the `bookController` and potentially a `Book` to the `BookDetailViewController`.
-
-1. Check the segue's `identifier` property using a conditional statement. If it's the one from the "Add" bar button item, then this means the user wants to create a new `Book`. Pass the `bookController` variable in the table view controller to the segue's destination view controller. (You will need to cast the destination as the correctly typed view controller)
-2. If the segue's identifier matches the cell's segue identifier, do the same thing as step 1, and also pass a `Book` object that was selected in the table view to the destination view controller's `book` property as well.
-
-### Go Further
-
-- Sort the cells in each section alphabetically
-- Change the `Book` model to hold a `UIImage`. Modify the detail view controller to allow the user to select an image from their photo library as the book's cover (Look at `UIImagePickerController`). Modify the cell to display the book's cover.
+7. In the `onActivityResult` method, you will now check the requestCode and the resultCode and call the `handleEditActivityResult` method, passing it the `Intent` object.
+8. In the `onCreate` method, you will now get a handle to the `ScrollView` and then call the `getBooksView` and pass that result to the `ScrollView`'s `addView` method.
+9. Test the app
