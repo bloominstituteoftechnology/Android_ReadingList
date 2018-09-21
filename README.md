@@ -6,7 +6,8 @@ Reading List is an application that lets you save a list of books and allow you 
 
 Please look at the screen recording below to know what the finished project should look like:
 
-![](https://github.com/LambdaSchool/Android_ReadingList/blob/master/ReadingList_MVP.gif)
+
+<img src="https://github.com/LambdaSchool/Android_ReadingList/blob/master/ReadingList_MVP.gif" width="300">
 
 ## Instructions
 
@@ -15,8 +16,8 @@ Please look at the screen recording below to know what the finished project shou
 For this project, we'll be using a top-down coding process. The advantage of doing this is that we can have an app that a user can interact with and then you can add functionality behind it.  
 
 #### Book  
-1. Create a "Book.java" file. Create a struct called `Book`  
-2. This struct should have the following properties:  
+1. Create a "Book.java" file. Create a class called `Book`  
+2. This class should have the following data members:  
     - A `title` String  
     - A `reasonToRead` String  
     - A `hasBeenRead` boolean  
