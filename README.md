@@ -6,7 +6,7 @@ Reading List is an application that lets you save a list of books and allow you 
 
 Please look at the screen recording below to know what the finished project should look like:
 
-![]()
+![](https://github.com/LambdaSchool/Android_ReadingList/blob/master/ReadingList_MVP.gif)
 
 ## Instructions
 
