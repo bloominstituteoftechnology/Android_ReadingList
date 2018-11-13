@@ -1,7 +1,6 @@
 package com.example.jacob.android_readinglist;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,14 +16,12 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences preferences;
 
     private Context context;
-    private LinearLayout listLayout;
+    private LinearLayout layoutList;
     //    private BookViewModel viewModel;
     public static final int EDIT_REQUEST_CODE = 1;
     private Book book;
@@ -38,39 +35,31 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        context = this;
+        layoutList = findViewById(R.id.layout_book_list);
+//        preferences = this.getSharedPreferences();
+//        preferences = this.getPreferences(Context.MODE_PRIVATE);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                int id = layoutList.getChildCount();
+                Intent intent = new Intent(context,EditBookActivity.class);
+                intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, id);
+                startActivityForResult(intent, EDIT_REQUEST_CODE);
+
             }
         });
 
-        preferences = this.getPreferences(Context.MODE_PRIVATE);
 
-        context = this;
-        listLayout = findViewById(R.id.layout_book_list);
-        book = new Book(1, "Test Book Title1", "Test Reason to read1.", false);
-        listLayout.addView(buildItemView(book));
+
+/*        book = new Book(1, "Test Book Title1", "Test Reason to read1.", false);
+        layoutList.addView(buildItemView(book));
         book = new Book(1, "Test Book Title2", "Test Reason to read2.", true);
-        listLayout.addView(buildItemView(book));
-
-
-
-/*        viewModel = ViewModelProviders.of(this).get(BookViewModel.class);
-
-        final Observer<ArrayList<Note>> observer = new Observer<ArrayList<Note>>() {
-            @Override
-            public void onChanged(@Nullable ArrayList<Note> notes) {
-                if (notes != null) {
-                    refreshListView(notes);
-                }
-
-            }
-        };
-        viewModel.getNotesList().observe(this, observer);*/
-
+        layoutList.addView(buildItemView(book));*/
 
     }
 
@@ -104,13 +93,25 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//               Intent intent = new Intent(context, EditActivity.class);
-//               intent.putExtra(EditActivity.EDIT_NOTE_KEY, book);
-//               startActivityForResult(intent, EDIT_REQUEST_CODE);
+               Intent intent = new Intent(context, EditBookActivity.class);
+               intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, book.toCSVString());
+               startActivityForResult(intent, EDIT_REQUEST_CODE);
             }
         });
 
         return textView;
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                String returnedString = data.getStringExtra(EditBookActivity.EDIT_BOOK_KEY);
+                Book returnedBook = new Book(returnedString);
+                layoutList.addView(buildItemView(returnedBook));
+                //TODO check if id already exists and update if so.
+            }
+        }
     }
 }

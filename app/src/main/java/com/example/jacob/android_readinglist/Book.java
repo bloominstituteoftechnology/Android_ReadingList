@@ -1,8 +1,7 @@
 package com.example.jacob.android_readinglist;
 
-import java.io.Serializable;
 
-public class Book implements Serializable {
+public class Book {
     public static final int NO_ID = -1;
 
     public String title, reasonToRead;
@@ -20,8 +19,8 @@ public class Book implements Serializable {
         String[] values = csvString.split(",");
         this.id = Integer.parseInt(values[0]);
         this.title = values[1];
-        this.reasonToRead = values[3];
-        if (values[4].equals("true")) {
+        this.reasonToRead = values[2];
+        if (values[3].equals("true")) {
             this.hasBeenRead = true;
         } else {
             this.hasBeenRead = false;
@@ -44,7 +43,7 @@ public class Book implements Serializable {
         this.reasonToRead = reasonToRead;
     }
 
-    public boolean isHasBeenRead() {
+    public boolean getHasBeenRead() {
         return hasBeenRead;
     }
 
