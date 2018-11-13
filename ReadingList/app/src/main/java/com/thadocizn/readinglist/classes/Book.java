@@ -6,10 +6,10 @@ public class Book {
     private Boolean hasBeenRead;
     private String id;
 
-    public Book(String title, String reasonToRead, Boolean hasBeenRead, String id) {
+    public Book(String title, String reasonToRead, String hasBeenRead, String id) {
         this.title = title;
         this.reasonToRead = reasonToRead;
-        this.hasBeenRead = hasBeenRead;
+        this.hasBeenRead = Boolean.valueOf(hasBeenRead);
         this.id = id;
     }
 
@@ -25,4 +25,19 @@ public class Book {
        return String.format("%s,%s,%b,%s".replaceAll(",", ""), this.title, this.reasonToRead, this.hasBeenRead, this.id);
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getReasonToRead() {
+        return reasonToRead;
+    }
+
+    public Boolean getHasBeenRead() {
+        return hasBeenRead;
+    }
+
+    public String getId() {
+        return id;
+    }
 }
