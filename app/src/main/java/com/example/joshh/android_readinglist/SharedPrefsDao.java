@@ -9,7 +9,6 @@ public class SharedPrefsDao {
     private static final String KEY_IDS = "key_ids";
     private static final String NEXT_KEY_ID = "key_next_id";
 
-
     private static String getIdsString(){
         String keyIds = "";
         if (MainActivity.preferences != null) {
@@ -44,26 +43,29 @@ public class SharedPrefsDao {
     }
 
     public static String getNextId(){
-        int currentId = 0;
+        String currentId;
+        String stringNextId = "";
         if (MainActivity.preferences != null) {
-            currentId = MainActivity.preferences.getInt(NEXT_KEY_ID, 0);
-            int nextId = currentId + 1;
+            currentId = MainActivity.preferences.getString(NEXT_KEY_ID, "");
+            int intCurrentId = Integer.parseInt(currentId);
+            int nextId = intCurrentId + 1;
+            stringNextId = Integer.toString(nextId);
             SharedPreferences.Editor editor = MainActivity.preferences.edit();
-            editor.putInt(NEXT_KEY_ID, nextId);
+            editor.putString(NEXT_KEY_ID, stringNextId);
             editor.apply();
         }
-        return Integer.toString(currentId);
+        return stringNextId;
     }
 
     public static void updateBook(Book book){
-        if(book.getId() == null){
+        if(book.getId() == ""){
             book.setId(getNextId());
         }
         String[] ids = getAllIds();
         boolean exists = false;
         for(String id : ids){
             if(!id.equals("")){
-                if(book.getId() == id){
+                if(book.getId() == (id)){
                     exists = true;
                     break;
                 }
@@ -73,7 +75,6 @@ public class SharedPrefsDao {
             addId(book.getId());
         }
         addBook(book);
-        Log.i("UPDATEBOOK", getIdsString());
     }
 
     private static void addBook(Book book){

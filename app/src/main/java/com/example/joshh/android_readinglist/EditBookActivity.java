@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import java.util.Random;
+
 public class EditBookActivity extends AppCompatActivity {
 
     public static final String EDIT_BOOK_KEY = "book_key";
@@ -44,7 +46,7 @@ public class EditBookActivity extends AppCompatActivity {
             book = new Book(stringArray[0], stringArray[1], stringArray[2], Boolean.parseBoolean(stringArray[3]));
             title = book.getTitle();
             reasonToRead = book.getReasonToRead();
-            id = book.getId();
+            id = "";
             hasRead = book.isHasBeenRead();
         }
         editTitle.setText(title);
@@ -76,7 +78,7 @@ public class EditBookActivity extends AppCompatActivity {
         String newBookTitle = editTitle.getText().toString();
         String newReasonToRead = editReasonToRead.getText().toString();
         boolean newHasRead = checkHasRead.isChecked();
-        String csvString = String.format("%s,%s,%s,%b", newBookTitle, newReasonToRead, id, newHasRead);
+        String csvString = String.format("%s,%s,%s,%b", newBookTitle, newReasonToRead, BooksModel.getAllBooks().size(), newHasRead);
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EDIT_BOOK_KEY, csvString);
         setResult(Activity.RESULT_OK, resultIntent);
@@ -88,4 +90,5 @@ public class EditBookActivity extends AppCompatActivity {
         setResult(Activity.RESULT_CANCELED, resultIntent);
         finish();
     }
+
 }

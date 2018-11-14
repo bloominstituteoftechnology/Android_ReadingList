@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.GridLayout.LayoutParams;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BooksController {
 
@@ -43,20 +44,17 @@ public class BooksController {
         //view.getLayoutParams().width=  ViewGroup.LayoutParams.MATCH_PARENT;
         view.setText(book.getTitle());
         ll.addView(view);
-        //view.setTextSize(30);
-        //view.setPadding(55, 0, 0, 0);
-        //view.setTextColor(Color.BLACK);
-        //view.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-        //view.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        //ll.addView(view);
-        view.setOnClickListener(new View.OnClickListener() {
+        view.setTextSize(40);
+        view.setPadding(55, 0, 0, 8);
+        view.setTextColor(Color.BLACK);
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent editBookIntent = new Intent(context, EditBookActivity.class);
                 editBookIntent.putExtra(EditBookActivity.EDIT_BOOK_KEY, book.toCsvString());
-                handleEditActivityResult(editBookIntent);
+
             }
-        });
+        });*/
         return view;
     }
 
