@@ -1,6 +1,8 @@
 package com.thadocizn.readinglist.classes;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     private String title;
     private String reasonToRead;
     private Boolean hasBeenRead;
@@ -22,6 +24,10 @@ public class Book {
     }
 
     public String toCsvString(){
+       return String.format("%s,%s,%b,%s".replaceAll(" ", ","), this.title, this.reasonToRead, this.hasBeenRead, this.id);
+    }
+
+    public String getCsvString(){
        return String.format("%s,%s,%b,%s".replaceAll(",", " "), this.title, this.reasonToRead, this.hasBeenRead, this.id);
     }
 
