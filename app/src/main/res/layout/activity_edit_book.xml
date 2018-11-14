@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".EditBookActivity">
+
+    <EditText
+        android:id="@+id/edit_book_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@android:color/white"
+        android:hint="Enter Book Title" />
+
+    <EditText
+        android:id="@+id/edit_reason_to_read"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="8dp"
+        android:background="@android:color/white"
+        android:gravity="top"
+        android:hint="Reason to Read"
+        app:layout_constraintTop_toBottomOf="@+id/edit_book_title" />
+
+    <CheckBox
+        android:id="@+id/check_have_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Have you read this book?"
+        app:layout_constraintTop_toBottomOf="@+id/edit_reason_to_read" />
+
+    <LinearLayout
+        android:id="@+id/button_parent"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:text="Submit"
+            app:layout_constraintEnd_toStartOf="@+id/cancel_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="459dp" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:text="Cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/add_button"
+            tools:layout_editor_absoluteY="459dp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
