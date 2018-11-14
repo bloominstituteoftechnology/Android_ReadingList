@@ -6,7 +6,7 @@ public class Book {
     private Boolean hasBeenRead;
     private String id;
 
-    public Book(String title, String reasonToRead, String hasBeenRead, String id) {
+    public Book(String title, String reasonToRead, boolean hasBeenRead, String id) {
         this.title = title;
         this.reasonToRead = reasonToRead;
         this.hasBeenRead = Boolean.valueOf(hasBeenRead);
@@ -22,7 +22,7 @@ public class Book {
     }
 
     public String toCsvString(){
-       return String.format("%s,%s,%b,%s".replaceAll(",", ""), this.title, this.reasonToRead, this.hasBeenRead, this.id);
+       return String.format("%s,%s,%b,%s".replaceAll(",", " "), this.title, this.reasonToRead, this.hasBeenRead, this.id);
     }
 
     public String getTitle() {
