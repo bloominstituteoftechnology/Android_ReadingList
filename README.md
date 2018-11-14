@@ -125,6 +125,8 @@ A model, like a repository in MVVM architecture is in charge of managing the dat
 #### Write a controller to format the data and communicate with the model
 1. Create a class called `BooksContoller`
 2. Refactor your `buildItemView` method to move it to your new class.
+> In order to call `startActivityForResult` in this method, you'll need to pass a handle to the activity you'll be building
+
 3. Remove your list of `Book` objects, the loop to build their views, and the `LinearLayout`.
 4. In your `BookController`write a method called `getBooksView`that accepts a `Context` object
 5. In the new method, you'll get the list of book objects from the `BooksModel`, create a new `LinearLayout` object, use `buildItemView` to add view items to it, and return the `LinearLayout` view.
