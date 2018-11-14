@@ -27,9 +27,9 @@ public class Book implements Serializable {
        return String.format("%s,%s,%b,%s".replaceAll(" ", ","), this.title, this.reasonToRead, this.hasBeenRead, this.id);
     }
 
-    public String getCsvString(){
+   /* public String getCsvString(){
        return String.format("%s,%s,%b,%s".replaceAll(",", " "), this.title, this.reasonToRead, this.hasBeenRead, this.id);
-    }
+    }*/
 
     public String getTitle() {
         return title;

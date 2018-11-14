@@ -15,24 +15,35 @@ public class EditBookActivity extends AppCompatActivity {
     Boolean boolReadBook;
     String book;
     String csv;
+    Book currentbook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_book);
-         findViewById(R.id.editTextBookTitle);
-         findViewById(R.id.editTextReasonToRead);
+
+         edBookTitle = findViewById(R.id.editTextBookTitle);
+         edReasonToRead = findViewById(R.id.editTextReasonToRead);
 
         book = getIntent().getStringExtra(MainActivity.BOOK_ID);
         csv = getIntent().getStringExtra(MainActivity.CSV_VERSION);
 
+        setEditViews(csv);
+    }
+
+    private void setEditViews(String csv) {
         if (csv != null){
-            String strCurrentBook = csv;
+            currentbook = new Book(csv);
+
+            String strCurrentBook = currentbook.toCsvString();
             String[] parts = strCurrentBook.split(",");
-            edBookTitle.setText(parts[1]);
-            edReasonToRead.setText(parts[1]);
-            boolReadBook = Boolean.valueOf(parts[2]);
-            final String part = parts[1];
+            String strBookTitle = parts[0];
+            String strReasonToRead = parts[1];
+            String strReadBook = parts[2];
+            
+            edBookTitle.setText(strBookTitle);
+            edReasonToRead.setText(strReasonToRead);
+            boolReadBook = Boolean.valueOf(strReadBook);
         }
     }
 }
