@@ -19,6 +19,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences preferences;
+    public static final String DEFAULT_SHARE_PREFERENCES_KEY = "default_share_preferences";
 
     private Context context;
     private LinearLayout layoutList;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
         layoutList = findViewById(R.id.layout_book_list);
-//        preferences = this.getSharedPreferences();
+        preferences = this.getSharedPreferences(DEFAULT_SHARE_PREFERENCES_KEY, Context.MODE_PRIVATE);
 //        preferences = this.getPreferences(Context.MODE_PRIVATE);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 int id = layoutList.getChildCount();
-                Intent intent = new Intent(context,EditBookActivity.class);
+                Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, id);
                 startActivityForResult(intent, EDIT_REQUEST_CODE);
 
@@ -93,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent intent = new Intent(context, EditBookActivity.class);
-               intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, book.toCSVString());
-               startActivityForResult(intent, EDIT_REQUEST_CODE);
+                Intent intent = new Intent(context, EditBookActivity.class);
+                intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, book.toCSVString());
+                startActivityForResult(intent, EDIT_REQUEST_CODE);
             }
         });
 
@@ -109,8 +110,20 @@ public class MainActivity extends AppCompatActivity {
             if (data != null) {
                 String returnedString = data.getStringExtra(EditBookActivity.EDIT_BOOK_KEY);
                 Book returnedBook = new Book(returnedString);
-                layoutList.addView(buildItemView(returnedBook));
-                //TODO check if id already exists and update if so.
+                SharedPrefsDao.updateBook(returnedBook);
+                refreshListView();
+            }
+        }
+    }
+
+
+    private void refreshListView() {
+        layoutList.removeAllViews();
+
+        String[] allIds = SharedPrefsDao.getAllBookIds();
+        if (allIds != null) {
+            for (String id : allIds) {
+                layoutList.addView(buildItemView(SharedPrefsDao.getBook(id)));
             }
         }
     }

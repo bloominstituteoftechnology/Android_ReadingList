@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -26,7 +25,7 @@ public class EditBookActivity extends AppCompatActivity {
         chkHasBeenRead = findViewById(R.id.chkx_has_been_read);
 
 
-        bookAsCSVString = (String) getIntent().getStringExtra(EDIT_BOOK_KEY);
+        bookAsCSVString = getIntent().getStringExtra(EDIT_BOOK_KEY);
 
         if (bookAsCSVString != null) {
             book = new Book(bookAsCSVString);
@@ -64,6 +63,7 @@ public class EditBookActivity extends AppCompatActivity {
         book.setReasonToRead(editTextReasonToRead.getText().toString());
         book.setHasBeenRead(chkHasBeenRead.isChecked());
         Intent intent = new Intent();
+        String temp = book.toCSVString();
         intent.putExtra(EDIT_BOOK_KEY, book.toCSVString());
         setResult(Activity.RESULT_OK, intent);
         finish();
