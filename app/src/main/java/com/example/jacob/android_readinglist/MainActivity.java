@@ -14,19 +14,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ScrollView;
 
 public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences preferences;
     public static final String DEFAULT_SHARE_PREFERENCES_KEY = "default_share_preferences";
+    public static final int EDIT_REQUEST_CODE = 1;
 
     private Context context;
     private LinearLayout layoutList;
     //    private BookViewModel viewModel;
-    public static final int EDIT_REQUEST_CODE = 1;
     private Book book;
-//    Book(int id, String title, String reasonToRead, boolean hasBeenRead)
+    //    Book(int id, String title, String reasonToRead, boolean hasBeenRead)
 
 
     @Override
@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         context = this;
-        layoutList = findViewById(R.id.layout_book_list);
+//        layoutList = findViewById(R.id.layout_book_list);
+
         preferences = this.getSharedPreferences(DEFAULT_SHARE_PREFERENCES_KEY, Context.MODE_PRIVATE);
 //        preferences = this.getPreferences(Context.MODE_PRIVATE);
 
@@ -45,17 +46,17 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                int id = layoutList.getChildCount();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//                int id = layoutList.getChildCount();
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, id);
+                intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, Book.NO_ID);
                 startActivityForResult(intent, EDIT_REQUEST_CODE);
 
             }
         });
 
-
+        updateScrollView();
 
 /*        book = new Book(1, "Test Book Title1", "Test Reason to read1.", false);
         layoutList.addView(buildItemView(book));
@@ -86,45 +87,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private TextView buildItemView(final Book book) {
-        TextView textView = new TextView(context);
-        textView.setText(book.getTitle());
-        textView.setTextSize(24);
-        textView.setPadding(10, 10, 10, 10);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, book.toCSVString());
-                startActivityForResult(intent, EDIT_REQUEST_CODE);
-            }
-        });
-
-        return textView;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                String returnedString = data.getStringExtra(EditBookActivity.EDIT_BOOK_KEY);
-                Book returnedBook = new Book(returnedString);
-                SharedPrefsDao.updateBook(returnedBook);
-                refreshListView();
+            if (requestCode == EDIT_REQUEST_CODE) {
+                if (data != null) {
+                    String returnedString = data.getStringExtra(EditBookActivity.EDIT_BOOK_KEY);
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra(Constants.UPDATE_REQUEST_CODE, returnedString);
+                    BooksController.handleEditActivityResult(intent);
+                    updateScrollView();
+                }
             }
         }
     }
 
+    private void updateScrollView() {
+        ScrollView scrollView = findViewById(R.id.scrollview_list);
+        scrollView.removeAllViews();
+        layoutList = BooksController.getBooksView(context);
+        scrollView.addView(layoutList);
 
-    private void refreshListView() {
-        layoutList.removeAllViews();
-
-        String[] allIds = SharedPrefsDao.getAllBookIds();
-        if (allIds != null) {
-            for (String id : allIds) {
-                layoutList.addView(buildItemView(SharedPrefsDao.getBook(id)));
-            }
-        }
     }
 }

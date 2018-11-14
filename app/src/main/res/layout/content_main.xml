@@ -9,17 +9,18 @@
     tools:showIn="@layout/activity_main">
 
     <ScrollView
+        android:id="@+id/scrollview_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+<!--        <LinearLayout
             android:id="@+id/layout_book_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+        </LinearLayout>-->
 
-        </LinearLayout>
     </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
