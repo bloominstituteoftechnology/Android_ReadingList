@@ -1,7 +1,7 @@
 package com.example.jacob.android_readinglist;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -12,34 +12,35 @@ import java.util.ArrayList;
 
 public class BooksController extends BooksModel {
 
-    private static TextView buildItemView(final Book book, final Context context) {
-        TextView textView = new TextView(context);
+    private static TextView buildItemView(final Book book, final Activity activity) {
+        TextView textView = new TextView(activity);
         textView.setText(book.getTitle());
+        if (book.getHasBeenRead()) {
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
         textView.setTextSize(24);
         textView.setPadding(10, 10, 10, 10);
         textView.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, EditBookActivity.class);
-                String temp = book.toCSVString();
+                Intent intent = new Intent(activity, EditBookActivity.class);
                 intent.putExtra(EditBookActivity.EDIT_BOOK_KEY, book.toCSVString());
-                context.startActivity(intent);
-//                handleEditActivityResult(intent);
+                activity.startActivityForResult(intent,Constants.EDIT_REQUEST_CODE);
             }
         });
 
         return textView;
     }
 
-    public static LinearLayout getBooksView(Context context) {
-        LinearLayout linearLayout = new LinearLayout(context);
+    public static LinearLayout getBooksView(Activity activity) {
+        LinearLayout linearLayout = new LinearLayout(activity);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         TextView returnedTextView;
-        ArrayList<Book> allBooks = new ArrayList<Book>();
+        ArrayList<Book> allBooks;
         allBooks = getAllBooks();
         for (Book book : allBooks) {
-            returnedTextView = buildItemView(book, context);
+            returnedTextView = buildItemView(book, activity);
             linearLayout.addView(returnedTextView);
         }
 
@@ -52,6 +53,4 @@ public class BooksController extends BooksModel {
         BooksModel.changeBook(returnedBook);
 
     }
-
-
 }

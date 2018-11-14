@@ -19,10 +19,6 @@ public class BooksModel extends SharedPrefsDao {
         return getBook(id);
     }
 
-    private static int NextId() {
-        return getNextId();
-    }
-
     public static void changeBook(Book book) {
         updateBook(book);
     }

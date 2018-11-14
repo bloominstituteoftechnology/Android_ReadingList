@@ -35,10 +35,6 @@ public class Book {
         this.title = title;
     }
 
-    public String getReasonToRead() {
-        return reasonToRead;
-    }
-
     public void setReasonToRead(String reasonToRead) {
         this.reasonToRead = reasonToRead;
     }
@@ -60,7 +56,6 @@ public class Book {
     }
 
     public String toCSVString() {
-     return this.id + "," + this.title.replaceAll(",","") + "," + this.reasonToRead.replaceAll(",","") + "," + Boolean.toString(this.hasBeenRead);
+        return this.id + "," + this.title.replaceAll(",", "") + "," + this.reasonToRead.replaceAll(",", "") + "," + Boolean.toString(this.hasBeenRead);
     }
-
 }

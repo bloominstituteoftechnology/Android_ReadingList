@@ -33,7 +33,7 @@ public class EditBookActivity extends AppCompatActivity {
             editTextReasonToRead.setText(book.reasonToRead);
             chkHasBeenRead.setChecked(book.hasBeenRead);
         } else {
-            book = new Book(Book.NO_ID,"","",false);
+            book = new Book(Book.NO_ID, "", "", false);
         }
 
         findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
@@ -63,7 +63,6 @@ public class EditBookActivity extends AppCompatActivity {
         book.setReasonToRead(editTextReasonToRead.getText().toString());
         book.setHasBeenRead(chkHasBeenRead.isChecked());
         Intent intent = new Intent();
-        String temp = book.toCSVString();
         intent.putExtra(EDIT_BOOK_KEY, book.toCSVString());
         setResult(Activity.RESULT_OK, intent);
         finish();
