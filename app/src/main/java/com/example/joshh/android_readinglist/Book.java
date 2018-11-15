@@ -1,5 +1,9 @@
 package com.example.joshh.android_readinglist;
 
+import android.util.Log;
+
+import java.util.Arrays;
+
 public class Book {
     private String title;
     private String reasonToRead;
@@ -15,6 +19,7 @@ public class Book {
 
     public Book(String csvString){
         String[] csvData = csvString.split(",");
+        Log.i("csv", Arrays.toString(csvData));
         this.title = csvData[0];
         this.reasonToRead = csvData[1];
         this.id = csvData[2];
@@ -54,8 +59,7 @@ public class Book {
     }
 
     public String toCsvString(){
-        String bookString = this.getTitle() + "," + this.getReasonToRead() + "," + this.getId() + "," + this.hasBeenRead;
-        return bookString;
+        return this.title.replaceAll(",", "") + "," + this.reasonToRead.replaceAll(",", "") + "," + this.id + "," + this.hasBeenRead;
     }
 
 

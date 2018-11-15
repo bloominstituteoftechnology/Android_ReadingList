@@ -4,10 +4,12 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SharedPrefsDao {
     private static final String KEY_IDS = "key_ids";
     private static final String NEXT_KEY_ID = "key_next_id";
+    private static final String KEY_ID_PREFIX = "key_id_";
 
     private static String getIdsString(){
         String keyIds = "";
@@ -24,7 +26,8 @@ public class SharedPrefsDao {
     }
 
     public static ArrayList<Book> getAllBooks(){
-        String[]  ids = getAllIds();
+        String[] ids = getAllIds();
+        Log.i("ids", Arrays.toString(ids));
         ArrayList<Book> books = new ArrayList<>(ids.length);
         for(String id : ids){
             if(!id.equals(""))
@@ -36,7 +39,7 @@ public class SharedPrefsDao {
     public static Book getBook(String id) {
         Book book = null;
         if (MainActivity.preferences != null) {
-            final String bookString = MainActivity.preferences.getString(id, "");
+            final String bookString = MainActivity.preferences.getString(KEY_ID_PREFIX + id, "");
             book = new Book(bookString);
         }
         return book;
@@ -65,7 +68,7 @@ public class SharedPrefsDao {
         boolean exists = false;
         for(String id : ids){
             if(!id.equals("")){
-                if(book.getId() == (id)){
+                if(book.getId().equals(id)){
                     exists = true;
                     break;
                 }
@@ -79,7 +82,7 @@ public class SharedPrefsDao {
 
     private static void addBook(Book book){
         SharedPreferences.Editor editor = MainActivity.preferences.edit();
-        editor.putString(book.getId(), book.toCsvString());
+        editor.putString(KEY_ID_PREFIX + book.getId(), book.toCsvString());
         editor.apply();
     }
 

@@ -8,29 +8,21 @@
     tools:context=".EditBookActivity">
 
     <EditText
-        android:id="@+id/edit_book_title"
+        android:id="@+id/edit_title"
+        android:hint="Book title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@android:color/white"
-        android:hint="Enter Book Title" />
-
+        android:layout_height="wrap_content" />
     <EditText
-        android:id="@+id/edit_reason_to_read"
+        android:hint="Reason for reading"
+        app:layout_constraintTop_toBottomOf="@+id/edit_title"
+        android:id="@+id/edit_reason"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_margin="8dp"
-        android:background="@android:color/white"
-        android:gravity="top"
-        android:hint="Reason to Read"
-        app:layout_constraintTop_toBottomOf="@+id/edit_book_title" />
-
+        android:layout_height="wrap_content" />
     <CheckBox
-        android:id="@+id/check_have_read"
+        android:id="@+id/has_read"
+        app:layout_constraintTop_toBottomOf="@+id/edit_reason"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Have you read this book?"
-        app:layout_constraintTop_toBottomOf="@+id/edit_reason_to_read" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/button_parent"
@@ -45,8 +37,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
+
         <Button
-            android:id="@+id/add_button"
+            android:id="@+id/submit_button"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1.0"
@@ -66,8 +59,9 @@
             android:text="Cancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/add_button"
+            app:layout_constraintStart_toEndOf="@+id/submit_button"
             tools:layout_editor_absoluteY="459dp" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

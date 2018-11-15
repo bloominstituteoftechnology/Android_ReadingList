@@ -14,56 +14,52 @@ import java.util.Random;
 
 public class EditBookActivity extends AppCompatActivity {
 
-    public static final String EDIT_BOOK_KEY = "book_key";
-    public static final String ADD_BOOK_KEY = "add_book_key";
-
-    private String title, reasonToRead, id;
-    private boolean hasRead;
-
-    EditText editTitle, editReasonToRead;
-    CheckBox checkHasRead;
-    Button submitButton, cancelButton;
-
-    Book book;
-
+    public static final String EDIT_BOOK_KEY = "edit_book";
+    private EditText titleText, reasonText;
+    private CheckBox hasReadCheck;
+    private String id;
+    private Button submitButton, cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_book);
 
-        editTitle = findViewById(R.id.edit_book_title);
-        editReasonToRead = findViewById(R.id.edit_reason_to_read);
-        checkHasRead = findViewById(R.id.check_have_read);
-        submitButton = findViewById(R.id.add_button);
+        titleText = findViewById(R.id.edit_title);
+        reasonText = findViewById(R.id.edit_reason);
+        hasReadCheck = findViewById(R.id.has_read);
+        submitButton = findViewById(R.id.submit_button);
         cancelButton = findViewById(R.id.cancel_button);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra(ADD_BOOK_KEY);
-        String bookCsv = intent.getStringExtra(EDIT_BOOK_KEY);
-        if(bookCsv != null){
-            String[] stringArray = bookCsv.split(",");
-            book = new Book(stringArray[0], stringArray[1], stringArray[2], Boolean.parseBoolean(stringArray[3]));
-            title = book.getTitle();
-            reasonToRead = book.getReasonToRead();
-            id = "";
-            hasRead = book.isHasBeenRead();
-        }
-        editTitle.setText(title);
-        editReasonToRead.setText(reasonToRead);
-        checkHasRead.setChecked(hasRead);
+        id = intent.getStringExtra(EDIT_BOOK_KEY);
+        String csvString = intent.getStringExtra("csv_string");
+        if(csvString != null){
+            Book book = new Book(csvString);
+            String title = book.getTitle();
+            String reason = book.getReasonToRead();
+            id = book.getId();
+            boolean hasRead = book.isHasBeenRead();
 
+            titleText.setText(title);
+            reasonText.setText(reason);
+            hasReadCheck.setChecked(hasRead);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 returnData();
             }
         });
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelBookEdit();
+                cancelEdit();
             }
         });
     }
@@ -74,21 +70,20 @@ public class EditBookActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void returnData(){
-        String newBookTitle = editTitle.getText().toString();
-        String newReasonToRead = editReasonToRead.getText().toString();
-        boolean newHasRead = checkHasRead.isChecked();
-        String csvString = String.format("%s,%s,%s,%b", newBookTitle, newReasonToRead, BooksModel.getAllBooks().size(), newHasRead);
+    private void cancelEdit(){
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
+        finish();
+    }
+
+    private void returnData() {
+        String newBookTitle = titleText.getText().toString();
+        String newReasonToRead = reasonText.getText().toString();
+        boolean newHasRead = hasReadCheck.isChecked();
+        String csvString = String.format("%s,%s,%s,%b", newBookTitle, newReasonToRead, id, newHasRead);
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EDIT_BOOK_KEY, csvString);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
-
-    private void cancelBookEdit(){
-        Intent resultIntent = new Intent();
-        setResult(Activity.RESULT_CANCELED, resultIntent);
-        finish();
-    }
-
 }
