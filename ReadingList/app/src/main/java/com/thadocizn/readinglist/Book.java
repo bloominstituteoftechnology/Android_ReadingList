@@ -1,6 +1,8 @@
 package com.thadocizn.readinglist;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     private String title;
     private String reasonToRead;
     private String id;
