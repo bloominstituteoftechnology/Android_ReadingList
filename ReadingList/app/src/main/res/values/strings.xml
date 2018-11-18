@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ReadingList</string>
+    <string name="book_title">Book Title:</string>
+    <string name="read_book">Read Book</string>
 </resources>
