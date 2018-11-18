@@ -9,7 +9,7 @@ public class Book implements Serializable {
     private boolean hasBeenRead;
 
     public String toCsvString(){
-        return String.format("%s,%s,%b,%s".replaceAll(" ", ","), this.title, this.reasonToRead, this.hasBeenRead, this.id);
+        return String.format("%s,%s,%s,%b".replaceAll(" ", ","), this.title, this.reasonToRead, this.id, this.hasBeenRead);
     }
 
     public String getTitle() {

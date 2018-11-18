@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = this;
+        context      = this;
         parentLayout = findViewById(R.id.parentLayout);
 
         Book book = new Book("Cat in the Hat","Its a good book", "1",true);
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnAddBook).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = String.valueOf(parentLayout.getChildCount());
+                String id     = String.valueOf(parentLayout.getChildCount());
                 Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra(Constants.KEY_ID, id);
                 startActivity(intent);
