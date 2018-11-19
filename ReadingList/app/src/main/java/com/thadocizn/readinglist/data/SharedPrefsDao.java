@@ -1,10 +1,14 @@
 package com.thadocizn.readinglist.data;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.thadocizn.readinglist.activities.MainActivity;
 import com.thadocizn.readinglist.classes.Book;
 import com.thadocizn.readinglist.classes.Constants;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SharedPrefsDao {
 
@@ -29,7 +33,17 @@ public class SharedPrefsDao {
         return currentBook;
     }
 
-    private static String getNextId() {
+    public static ArrayList<Book> getAllBooks(){
+        String[] ids = getAllBookIds();
+        ArrayList<Book> books = new ArrayList<>(ids.length);
+        for(String id : ids){
+            if(!id.equals(""))
+                books.add(getBook(id));
+        }
+        return books;
+    }
+
+    public static String getNextId() {
 
             int currentId = MainActivity.preferences.getInt(Constants.NEXT_KEY_ID, 0);
             int nextId    = currentId + 1;
