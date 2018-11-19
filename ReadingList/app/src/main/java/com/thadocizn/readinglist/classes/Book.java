@@ -1,4 +1,4 @@
-package com.thadocizn.readinglist;
+package com.thadocizn.readinglist.classes;
 
 import java.io.Serializable;
 
@@ -59,4 +59,5 @@ public class Book implements Serializable {
         this.id = id;
         this.hasBeenRead = hasBeenRead;
     }
+
 }
