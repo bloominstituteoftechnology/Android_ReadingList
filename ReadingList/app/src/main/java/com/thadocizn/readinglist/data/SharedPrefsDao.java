@@ -45,13 +45,14 @@ public class SharedPrefsDao {
 
     public static String getNextId() {
 
-            int currentId = MainActivity.preferences.getInt(Constants.NEXT_KEY_ID, 0);
-            int nextId    = currentId + 1;
+            String currentId = MainActivity.preferences.getString(Constants.NEXT_KEY_ID, "");
+            int id = Integer.parseInt(currentId);
+            int nextId    = id + 1;
             String strNextId = String.valueOf(nextId);
             SharedPreferences.Editor editor = MainActivity.preferences.edit();
             editor.putString(Constants.NEXT_KEY_ID, strNextId);
             editor.apply();
-        return String.valueOf(currentId);
+        return strNextId;
     }
 
     public static Book getBookCsv(String id) {
@@ -64,6 +65,9 @@ public class SharedPrefsDao {
     }
 
     public static void updateBook(Book book){
+        if (book.getId().isEmpty()){
+            book.setId(getNextId());
+        }
         String[] ids = getAllBookIds();
         boolean active = false;
         for(String id : ids){
@@ -83,7 +87,7 @@ public class SharedPrefsDao {
         strGetId = strGetId + "," + id;
 
         SharedPreferences.Editor editor = MainActivity.preferences.edit();
-        editor.putString(Constants.KEY_IDS, strGetId);
+        editor.putString(Constants.KEY_IDS, strGetId.replace(" ", ""));
         editor.apply();
     }
 

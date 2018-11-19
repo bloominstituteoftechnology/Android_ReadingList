@@ -33,24 +33,25 @@ public class BookController {
         textView.setText(book.getTitle());
         textView.setTextSize(24);
         textView.setPadding(10, 10, 10, 10);
+        parentLayout.addView(textView);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra(Constants.CSV_STRING, book.toCsvString());
-                activity.startActivityForResult(intent, Constants.EDIT_BOOK_CODE);
+                activity.startActivityForResult(intent, Constants.EDIT_BOOK_REQUESTCODE);
             }
         });
         return textView;
     }
 
     public static void handleEditActivityResult(Intent intent){
-        String csvString = intent.getStringExtra(Constants.EDIT_BOOK_KEY);
-        String[] csv = csvString.split(",");
-        String title = csv[0];
-        String reason = csv[1];
-        String id = csv[2];
-        Boolean read = Boolean.parseBoolean(csv[3]);
+        String csvString  = intent.getStringExtra(Constants.EDIT_BOOK_KEY);
+        String[] csv      = csvString.split(",");
+        String title      = csv[0];
+        String reason     = csv[1];
+        String id         = csv[2];
+        Boolean read      = Boolean.parseBoolean(csv[3]);
         Book returnedBook = new Book(title, reason, id, read);
         BookModel.updateBook(returnedBook);
     }
