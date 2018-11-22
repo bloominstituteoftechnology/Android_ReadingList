@@ -12,11 +12,11 @@ public class BookModel {
         return booksArray;
     }
 
-    public static Book getBook(String id) {
-        return SharedPrefsDao.getBook(id);
+    public static String getBook(String id) {
+        return SharedPrefsDao.getBook(id).toCsvString();
     }
 
-    public String nextId() {
+    public static String nextId() {
         return SharedPrefsDao.getNextId();
     }
 

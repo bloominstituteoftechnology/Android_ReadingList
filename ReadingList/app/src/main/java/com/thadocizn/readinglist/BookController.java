@@ -38,7 +38,7 @@ public class BookController {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(Constants.CSV_STRING, book.toCsvString());
+                intent.putExtra(Constants.CSV_STRING, BookModel.getBook(book.getId()));
                 activity.startActivityForResult(intent, Constants.EDIT_BOOK_REQUESTCODE);
             }
         });

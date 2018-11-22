@@ -13,24 +13,15 @@ import java.util.Arrays;
 public class SharedPrefsDao {
 
     private static String getIds(){
-        String keyIds = "";
+        String keyIds = null;
         if (MainActivity.preferences != null){
             keyIds = MainActivity.preferences.getString(Constants.KEY_IDS, "");
         }
         return keyIds;
     }
-    public static String[] getAllBookIds(){
+    private static String[] getAllBookIds(){
         // keys are stored as csv
         return getIds().split(",");
-    }
-
-    public static Book getBook(String id){
-        Book currentBook = null;
-        if (MainActivity.preferences != null){
-          final  String strBook = MainActivity.preferences.getString(Constants.KEY_ID_PREFIX + id, "");
-          currentBook = new Book(strBook);
-        }
-        return currentBook;
     }
 
     public static ArrayList<Book> getAllBooks(){
@@ -43,25 +34,23 @@ public class SharedPrefsDao {
         return books;
     }
 
-    public static String getNextId() {
-
-            String currentId = MainActivity.preferences.getString(Constants.NEXT_KEY_ID, "");
-            int id = Integer.parseInt(currentId);
-            int nextId    = id + 1;
-            String strNextId = String.valueOf(nextId);
-            SharedPreferences.Editor editor = MainActivity.preferences.edit();
-            editor.putString(Constants.NEXT_KEY_ID, strNextId);
-            editor.apply();
-        return strNextId;
+    public static Book getBook(String id){
+        Book currentBook = null;
+        if (MainActivity.preferences != null){
+            final  String strBook = MainActivity.preferences.getString(Constants.KEY_ID_PREFIX + id, "");
+            currentBook = new Book(strBook);
+        }
+        return currentBook;
     }
 
-    public static Book getBookCsv(String id) {
-        Book book = null;
-        if (MainActivity.preferences != null) {
-            final String bookString = MainActivity.preferences.getString(Constants.KEY_ID_PREFIX + id, "");
-            book = new Book(bookString);
-        }
-        return book;
+    public static String getNextId() {
+
+        int currentId = MainActivity.preferences.getInt(Constants.NEXT_KEY_ID, 0);
+        int nextId    = currentId + 1;
+        SharedPreferences.Editor editor = MainActivity.preferences.edit();
+        editor.putInt(Constants.NEXT_KEY_ID, nextId);
+        editor.apply();
+        return String.valueOf(nextId);
     }
 
     public static void updateBook(Book book){
@@ -71,24 +60,15 @@ public class SharedPrefsDao {
         String[] ids = getAllBookIds();
         boolean active = false;
         for(String id : ids){
-                if(book.getId().equals(id)){
-                    active = true;
-                    break;
-                }
+            if(book.getId().equals(id)){
+                active = true;
+                break;
             }
+        }
         if(!active){
             addId(book.getId());
         }
         addBook(book);
-    }
-
-    public static void addId(String id){
-        String strGetId = getIds();
-        strGetId = strGetId + "," + id;
-
-        SharedPreferences.Editor editor = MainActivity.preferences.edit();
-        editor.putString(Constants.KEY_IDS, strGetId.replace(" ", ""));
-        editor.apply();
     }
 
     private static void addBook(Book book){
@@ -97,4 +77,12 @@ public class SharedPrefsDao {
         editor.apply();
     }
 
+    private static void addId(String id){
+        String strGetId = getIds();
+        strGetId = strGetId + "," + id;
+
+        SharedPreferences.Editor editor = MainActivity.preferences.edit();
+        editor.putString(Constants.KEY_IDS, strGetId.replace(" ", ""));
+        editor.apply();
+    }
 }
