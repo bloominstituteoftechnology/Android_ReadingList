@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditActivity.class);
                 intent.putExtra("id", nextId++);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
     }
