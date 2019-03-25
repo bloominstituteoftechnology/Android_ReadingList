@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Reading List</string>
+    <string name="add_book">Add Book</string>
+    <string name="save">Save</string>
+    <string name="book_title">Enter book title:</string>
+    <string name="book_reason">Enter book reason:</string>
+    <string name="read">Read?</string>
+</resources>
