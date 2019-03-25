@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
+                intent.putExtra(Book.NEW_BOOK_TAG, bookViewLayout.getChildCount());
                 startActivity(intent);
             }
         });
@@ -32,10 +33,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private TextView buildItemView(Book book) {
+    private TextView buildItemView(final Book book) {
         TextView bookView = new TextView(context);
         bookView.setText(book.getTitle());
         bookView.setTextSize(18);
+        bookView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(Book.EDIT_BOOK_TAG, book.toCsvString());
+                startActivity(intent);
+            }
+        });
         return bookView;
     }
 }

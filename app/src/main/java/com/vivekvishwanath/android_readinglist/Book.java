@@ -6,6 +6,9 @@ public class Book {
     private String reasonToRead;
     private boolean hasBeenRead;
 
+    public static final String NEW_BOOK_TAG = "New Book";
+    public static final String EDIT_BOOK_TAG = "Edit Book";
+
     public Book(String id, String title, String reasonToRead, boolean hasBeenRead) {
         this.id = id;
         this.title = title;
