@@ -12,10 +12,11 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable {
 
 
     int readColor = Color.parseColor("#198c19");
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private TextView buildItemView(Book bookView){
+    private TextView buildItemView(final Book bookView){
 
         TextView view = new TextView(getApplicationContext());
         listLayout.addView(view);
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             Intent sendBook = new Intent(context, EditBookActivity.class);
+            String bookViewString = bookView.toCsvString();
+            sendBook.putExtra("editBook", bookViewString);
             }
         });
         return view;

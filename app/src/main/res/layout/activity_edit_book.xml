@@ -8,7 +8,7 @@
     tools:context=".EditBookActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/book_id_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -43,7 +43,7 @@
         app:layout_constraintVertical_bias="0.207" />
 
     <EditText
-        android:id="@+id/textView3"
+        android:id="@+id/reason_to_read_view"
         android:layout_width="302dp"
         android:layout_height="363dp"
         android:layout_marginStart="8dp"
@@ -60,7 +60,7 @@
         app:layout_constraintVertical_bias="0.35" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/read_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

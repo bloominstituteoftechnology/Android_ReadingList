@@ -11,12 +11,18 @@ public class Book {
         this.hasBeenRead = hasBeenRead;
 
     }
-    public void createBook(String csvBook){
+    public Book (String id){
+        this.id = id;
+
+    }
+    public Book createBook(String csvBook){
         String[] bookStringList = csvBook.split(",");
         id = bookStringList[0];
         title = bookStringList[1];
         reasonToRead = bookStringList[2];
         hasBeenRead = Boolean.parseBoolean(bookStringList[3]);
+        Book newBook = new Book(id,title,reasonToRead,hasBeenRead);
+        return newBook;
 
     }
     String toCsvString(){
@@ -38,5 +44,21 @@ public class Book {
 
     public Boolean getHasBeenRead() {
         return hasBeenRead;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setReasonToRead(String reasonToRead) {
+        this.reasonToRead = reasonToRead;
+    }
+
+    public void setHasBeenRead(Boolean hasBeenRead) {
+        this.hasBeenRead = hasBeenRead;
+    }
+
+    public void setId(String id){
+        this.id = id;
     }
 }
