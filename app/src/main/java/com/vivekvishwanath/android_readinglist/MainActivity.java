@@ -2,6 +2,7 @@ package com.vivekvishwanath.android_readinglist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     Button addBookButton;
     LinearLayout bookViewLayout;
+    public static final int BOOK_REQUEST_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra(Book.NEW_BOOK_TAG, bookViewLayout.getChildCount());
-                startActivity(intent);
+                startActivityForResult(intent, BOOK_REQUEST_CODE);
             }
         });
         bookViewLayout = findViewById(R.id.book_view_layout);
@@ -42,9 +44,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra(Book.EDIT_BOOK_TAG, book.toCsvString());
-                startActivity(intent);
+                startActivityForResult(intent, BOOK_REQUEST_CODE);
             }
         });
         return bookView;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == BOOK_REQUEST_CODE && requestCode == RESULT_OK) {
+            String bookCsv = data.getStringExtra(Book.EDIT_BOOK_TAG);
+        }
     }
 }
