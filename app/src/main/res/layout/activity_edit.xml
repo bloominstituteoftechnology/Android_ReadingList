@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditActivity">
+
+    <TextView
+        android:id="@+id/page_title"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textSize="26sp"
+        android:text="Enter or Change a book to read!"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15sp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/edit_book_title"
+        android:hint="Title of Book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/page_title"/>
+
+    <EditText
+        android:id="@+id/edit_book_reason"
+        android:lines="10"
+        android:hint="Enter a brief description of why you should read this book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_title"/>
+
+    <Button
+        android:id="@+id/button_submit"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_reason"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Submit Book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</android.support.constraint.ConstraintLayout>
