@@ -20,12 +20,12 @@ public class Book {
         this.hasBeenRead = Boolean.parseBoolean(values[3]);
     }
 
-    public String toCsvString(Book book){
+    static public String toCsvString(Book book){
         String csvString;
-        csvString = this.id +         "," +
-                this.title +          "," +
-                this.reasonToRead +   "," +
-                Boolean.toString(this.hasBeenRead);
+        csvString = book.id +         "," +
+                book.title +          "," +
+                book.reasonToRead +   "," +
+                Boolean.toString(book.hasBeenRead);
         return csvString;
 
     }

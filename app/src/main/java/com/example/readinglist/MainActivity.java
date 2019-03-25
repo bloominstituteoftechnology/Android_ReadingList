@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditBookActivity.class);
+                //handles the case of pushing the button
+                String id = Integer.toString(linearLayout.getChildCount());
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
@@ -45,13 +48,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public TextView BuildItemView(Book book){
+    public TextView BuildItemView(final Book book){
         TextView tv = new TextView(context);
         tv.setText("Title: " + book.getTitle() + "\n Reason To Read: " + book.getReasonToRead() );
         tv.setTextSize(22);
         if (!book.isHasBeenRead()) {
             tv.setTypeface(Typeface.DEFAULT_BOLD);
         }
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, EditBookActivity.class);
+                //handles the case of tapping an already existing book
+                String temp = Book.toCsvString(book);
+                intent.putExtra("BookCsv", temp);
+                startActivity(intent);
+            }
+        });
         return tv;
     }
 }
