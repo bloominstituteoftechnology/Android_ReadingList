@@ -1,5 +1,6 @@
 package com.lambdaschool.android_readinglist;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,13 +9,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String BOOK_DISPLAY_SEPARATOR = ": ";
+    public static final int PADDING_FOR_TEXTVIEW = 15;
+    public static final int TEXTSIZE_FOR_TEXTVIEW = 22;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;
+        LinearLayout linearLayout = findViewById(R.id.linear_layout_books);
+        linearLayout.addView(buildItemView(new Book("0,Harry Potter,Fun,False")));
+        linearLayout.addView(buildItemView(new Book("1,Where the Red Fern Grows,Adventurous,True")));
+        linearLayout.addView(buildItemView(new Book("45,Lamb of the Ages,Mind Expanding,False")));
+        linearLayout.addView(buildItemView(new Book("7000,Star Wars,A sage,True")));
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,5 +64,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public TextView buildItemView(Book book) {
+        TextView textview = new TextView(context);
+        textview.setText(book.getId() + BOOK_DISPLAY_SEPARATOR + book.getTitle());
+        textview.setPadding(PADDING_FOR_TEXTVIEW, PADDING_FOR_TEXTVIEW, PADDING_FOR_TEXTVIEW, PADDING_FOR_TEXTVIEW);
+        textview.setTextSize(TEXTSIZE_FOR_TEXTVIEW);
+        textview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        return textview;
     }
 }
