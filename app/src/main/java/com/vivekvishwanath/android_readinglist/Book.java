@@ -19,7 +19,7 @@ public class Book {
             this.id = bookValues[0];
             this.title = bookValues[1].replace("~@", ",");
             this.reasonToRead = bookValues[2].replace("~@", ",");
-            if (bookValues[3] == "read")
+            if (bookValues[3].equals("read"))
                 this.hasBeenRead = true;
             else
                 this.hasBeenRead = false;
