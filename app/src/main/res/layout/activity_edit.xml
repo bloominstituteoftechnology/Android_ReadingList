@@ -32,9 +32,18 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/edit_book_title"/>
 
+    <Switch
+        android:text="Read before?"
+        android:id="@+id/switch_has_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/edit_book_reason"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <Button
         android:id="@+id/button_submit"
-        app:layout_constraintTop_toBottomOf="@id/edit_book_reason"
+        app:layout_constraintTop_toBottomOf="@id/switch_has_read"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="Submit Book"

@@ -1,6 +1,7 @@
 package com.jakeesveld.readinglist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -44,11 +45,14 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(context, EditActivity.class);
+                intent.putExtra("id", nextId++);
+                startActivity(intent);
             }
         });
     }
 
-    public TextView createBookView(Book addedBook){
+    public TextView createBookView(final Book addedBook){
         TextView newBook = new TextView(context);
 
         newBook.setText(addedBook.getTitle());
@@ -57,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
         }
         newBook.setTextSize(22);
         newBook.setPadding(10,10,10,10);
+        newBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditActivity.class);
+                String csvBook = addedBook.toCSVString();
+                intent.putExtra("book", csvBook);
+                startActivityForResult(intent, 1);
+            }
+        });
 
 
         return newBook;

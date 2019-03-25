@@ -1,6 +1,8 @@
 package com.jakeesveld.readinglist;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
 
     private String title, reasonToRead;
     private Boolean hasBeenRead;
@@ -14,13 +16,24 @@ public class Book {
     }
 
     public Book(String csvObject){
+        String[] values = csvObject.split(",");
+        if(values.length == 4){
+            this.title = values[0];
+            this.reasonToRead = values[1].replace("~@", ",");
+            if(values[2].equals("true")){
+                this.hasBeenRead = true;
+            }else{
+                this.hasBeenRead = false;
+            }
+            this.id = Integer.parseInt(values[3]);
+        }
 
     }
 
     public String toCSVString(){
-        return String.format("%s, %s, %b, %d",
+        return String.format("%s,%s,%b,%d",
                 title,
-                reasonToRead,
+                reasonToRead.replace(",", "~@"),
                 hasBeenRead,
                 id);
     }
