@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     Context context;
-    LinearLayout ll;
+    private LinearLayout ll;
+    private static int REQUEST_CODE = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(Book.TAG, ll.getChildCount());
-                startActivity(intent);
+                intent.putExtra(Book.TAG, String.valueOf(ll.getChildCount()));
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
@@ -50,6 +52,22 @@ public class MainActivity extends AppCompatActivity {
         ll.addView(buildItemView(b1));
         ll.addView(buildItemView(b2));
         ll.addView(buildItemView(b3));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE){
+            Book book = new Book(data.getStringExtra(Book.TAG));
+
+           // if(doesBookIdExist(book) == false) {
+                ll.addView(buildItemView(book));
+          //  }
+/*            else{
+                EditText et = ll.findViewById(Integer.parseInt(book.getId()));
+                et.setText(book.getTitle());
+            }*/
+        }
     }
 
     @Override
@@ -83,13 +101,25 @@ public class MainActivity extends AppCompatActivity {
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra("editBook", "editBook");
                 intent.putExtra(Book.TAG, csvString);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
         return tv;
+    }
+
+    public boolean doesBookIdExist(Book book){
+        int bookID = Integer.parseInt(book.getId());
+
+        if(ll.findViewById(bookID) != null)
+        {
+            return true;
+        }
+        else{return false;}
+
     }
 
 
