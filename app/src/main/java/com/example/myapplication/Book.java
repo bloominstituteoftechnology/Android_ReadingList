@@ -2,6 +2,9 @@ package com.example.myapplication;
 
 public class Book{
 
+
+    public static String TAG = "Book";
+
     private String  title;
     private String  reasonToRead;
     private String  id;

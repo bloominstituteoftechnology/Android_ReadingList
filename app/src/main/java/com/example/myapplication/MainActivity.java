@@ -10,10 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
 
     Context context;
     LinearLayout ll;
@@ -31,12 +33,13 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(context, EditBookActivity.class);
+                intent.putExtra(Book.TAG, ll.getChildCount());
+                startActivity(intent);
             }
         });
 
-/*        String bookString1 = "1,The Great Escape1,It's a good book,read";
+        String bookString1 = "1,The Great Escape1,It's a good book,read";
         String bookString2 = "1,The Great Escape2,It's a good book,read";
         String bookString3 = "1,The Great Escape3,It's a good book,read";
 
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         ll.addView(buildItemView(b1));
         ll.addView(buildItemView(b2));
-        ll.addView(buildItemView(b3));*/
+        ll.addView(buildItemView(b3));
     }
 
     @Override
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public TextView buildItemView(Book book){
+        final String csvString = book.toCsvString();
         TextView tv = new TextView(context);
         tv.setText(book.getTitle());
         tv.setTextSize(24);
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
+                intent.putExtra("editBook", "editBook");
+                intent.putExtra(Book.TAG, csvString);
             }
         });
 
