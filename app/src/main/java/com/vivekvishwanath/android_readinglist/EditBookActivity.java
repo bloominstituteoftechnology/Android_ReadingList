@@ -12,6 +12,7 @@ public class EditBookActivity extends AppCompatActivity {
     EditText bookNameText;
     EditText bookReasonText;
     Switch readSwitch;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +24,30 @@ public class EditBookActivity extends AppCompatActivity {
         readSwitch = findViewById(R.id.read_switch);
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra(Book.NEW_BOOK_TAG);
+        id = intent.getStringExtra(Book.NEW_BOOK_TAG);
         String bookCsv = intent.getStringExtra(Book.EDIT_BOOK_TAG);
         if (bookCsv != null) {
             Book book = new Book(bookCsv);
             bookNameText.setText(book.getTitle());
             bookReasonText.setText(book.getReasonToRead());
             readSwitch.setChecked(book.isHasBeenRead());
+            id = book.getId();
         }
+    }
+
+    private void returnData() {
+        String bookName = bookNameText.getText().toString();
+        String bookReason = bookReasonText.getText().toString();
+        Book book = new Book(id, bookName, bookReason, readSwitch.isChecked());
+        String bookCsv = book.toCsvString();
+        Intent intent = new Intent();
+        intent.putExtra(Book.EDIT_BOOK_TAG, bookCsv);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        returnData();
     }
 }
