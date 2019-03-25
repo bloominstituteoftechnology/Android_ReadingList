@@ -1,19 +1,43 @@
 package com.lambdaschool.android_readinglist;
 
 public class Book {
-    private String title;
-    private String reasonToRead;
+    public static final String REPLACEMENT_FOR_COMMAS = "~@";
+    private String id, title, reasonToRead;
     private boolean hasBeenRead;
-    private String id;
 
-    public Book(String title, String reasonToRead, boolean hasBeenRead, String id) {
+    public Book(String id, String title, String reasonToRead, boolean hasBeenRead) {
+        this.id = id;
         this.title = title;
         this.reasonToRead = reasonToRead;
         this.hasBeenRead = hasBeenRead;
-        this.id = id;
     }
 
     public Book(String csvString) {
+        String[] sections = csvString.split(",");
 
+        this.id = sections[0];
+        this.title = sections[1].replace(REPLACEMENT_FOR_COMMAS, ",");
+        this.reasonToRead = sections[2].replace(REPLACEMENT_FOR_COMMAS, ",");
+        this.hasBeenRead = Boolean.parseBoolean(sections[3]);
+    }
+
+    public String toCsvString() {
+        return String.format("%s,%s,%s,%b", id, title.replace(",", REPLACEMENT_FOR_COMMAS), reasonToRead.replace(",", "~@"), hasBeenRead);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getReasonToRead() {
+        return reasonToRead;
+    }
+
+    public boolean isHasBeenRead() {
+        return hasBeenRead;
     }
 }
