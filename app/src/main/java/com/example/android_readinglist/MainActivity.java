@@ -1,8 +1,10 @@
 package com.example.android_readinglist;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements Serializable {
 
 
+    public static final int REQUEST_CODE_ADD = 123;
     int readColor = Color.parseColor("#198c19");
     int unreadColor = Color.parseColor("#b20000");
     LinearLayout listLayout;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     Button addButton;
     Context context;
     int nextId;
+    Book createdBook;
 
 
     @Override
@@ -34,7 +38,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);
         context = this;
         listLayout = findViewById(R.id.scroller_view);
-/*
+
+        /*
+
         bookArrayList.add(book1);
         bookArrayList.add(book2);
         bookArrayList.add(book3);
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                  int  id =listLayout.getChildCount();
                  String stringId = Integer.toString(id);
                 editActivity.putExtra("id",stringId);
-                 startActivity(editActivity);
+                 startActivityForResult(editActivity, REQUEST_CODE_ADD);
             }
         });
     }
@@ -74,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             Intent sendBook = new Intent(context, EditBookActivity.class);
             String bookViewString = bookView.toCsvString();
             sendBook.putExtra("editBook", bookViewString);
+            startActivityForResult(sendBook, REQUEST_CODE_ADD);
             }
         });
         return view;
@@ -81,13 +88,26 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 //    public void createBook(String id, String title, String reaonToRead, Boolean hasBeenRead)
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            if (data!=null){
+                data = getIntent();
+                String returnedBook = data.getStringExtra("returnedBook");
+                Book book = createdBook.createBook(returnedBook);
+                bookArrayList.add(book);
 
-Book book1 = new Book("1","Its beginning to look alot like work","goodbook",true);
+            }
+        }
+
+
+    }
+    {Book book1 = new Book("1","Its beginning to look alot like work","goodbook",true);
 Book book2 = new Book("2","Its beginning to look alot like work","goodbook",false);
 Book book3 = new Book("3","Its beginning to look alot like work","goodbook",true);
 Book book4 = new Book("4","Its beginning to look alot like work","goodbook",true);
 Book book5 = new Book("5","Its beginning to look alot like work","goodbook",false);
-Book book6 = new Book("6","Its beginning to look alot like work","goodbook",true);
+Book book6 = new Book("6","Its beginning to look alot like work","goodbook",true);}
 
 
 
