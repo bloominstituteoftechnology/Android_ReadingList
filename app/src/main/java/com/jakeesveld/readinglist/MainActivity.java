@@ -2,8 +2,10 @@ package com.jakeesveld.readinglist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,14 +34,8 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         layoutList = findViewById(R.id.layout_list);
         bookList = new ArrayList<>();
-        bookList.add(createDummyBook());
-        bookList.add(createDummyBook());
-        bookList.add(createDummyBook());
-        bookList.add(createDummyBook());
 
-        for(Book book: bookList){
-            layoutList.addView(createBookView(book));
-        }
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -76,24 +72,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public Book createDummyBook(){
-        Book dummyBook = new Book(
-                "Dummy Title",
-                "It's a book for dummies",
-                true,
-                nextId++
-        );
 
-        return dummyBook;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        layoutList.removeAllViews();
+        for(Book book: bookList){
+            layoutList.addView(createBookView(book));
+        }
     }
 
-
-
-
-
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 1){
+            String returnedCSV = data.getStringExtra("returned_book");
+            Book returnedBook = new Book(returnedCSV);
+            bookList.add(returnedBook);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -21,6 +21,7 @@ public class EditActivity extends AppCompatActivity {
     Button buttonCancel;
     Context context;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +32,9 @@ public class EditActivity extends AppCompatActivity {
         buttonSubmit = findViewById(R.id.button_submit);
         buttonCancel = findViewById(R.id.button_cancel);
         context = this;
+        final Intent intent = getIntent();
 
-        Intent intent = getIntent();
+
         if(intent.hasExtra("id")){
             int newBookId = intent.getIntExtra("id", -1);
             currentBook = new Book("", "", false, newBookId);
@@ -95,7 +97,9 @@ public class EditActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnData(currentBook);
+                intent.putExtra("returned_book", returnData(currentBook));
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -112,19 +116,17 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        returnData(currentBook);
-    }
-
-    private void returnData(Book editedBook){
-        String returnedBook = editedBook.toCSVString();
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("returned_book", returnedBook);
-        setResult(RESULT_OK);
+        Intent intent = getIntent();
+        intent.putExtra("retuned_book", returnData(currentBook));
+        setResult(RESULT_OK, intent);
         finish();
     }
 
+    public String returnData(Book editedBook){
+        return editedBook.toCSVString();
+    }
+
     private void cancelEdit(){
-        Intent intent = new Intent(context, MainActivity.class);
         setResult(RESULT_CANCELED);
         finish();
     }
