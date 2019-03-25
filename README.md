@@ -1,5 +1,4 @@
-﻿test 1
-# Reading List
+﻿# Reading List
 
 ## Introduction
 
