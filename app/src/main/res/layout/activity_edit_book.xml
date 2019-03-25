@@ -6,4 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".EditBookActivity">
 
+    <EditText
+        android:id="@+id/tv_title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Title"
+        app:layout_constraintBottom_toTopOf="@id/tv_reasons"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/tv_reasons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="4"
+        android:hint="Reasons to read"
+        app:layout_constraintBottom_toTopOf="@+id/is_read_box"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <CheckBox
+        android:id="@+id/is_read_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Read"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_reasons" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="300dp" />
 </android.support.constraint.ConstraintLayout>
