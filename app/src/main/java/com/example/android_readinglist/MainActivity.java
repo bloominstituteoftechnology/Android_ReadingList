@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent sendBook = new Intent()
+            Intent sendBook = new Intent(context, EditBookActivity.class);
             }
         });
         return view;
