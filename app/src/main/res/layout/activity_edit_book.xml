@@ -52,5 +52,19 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/save_button"
+        app:layout_constraintBottom_toTopOf="@id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"/>
+
+    <Button
+        android:id="@+id/cancel_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"/>
+
 </android.support.constraint.ConstraintLayout>
 
