@@ -24,5 +24,12 @@ public class EditBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String id = intent.getStringExtra(Book.NEW_BOOK_TAG);
+        String bookCsv = intent.getStringExtra(Book.EDIT_BOOK_TAG);
+        if (bookCsv != null) {
+            Book book = new Book(bookCsv);
+            bookNameText.setText(book.getTitle());
+            bookReasonText.setText(book.getReasonToRead());
+            readSwitch.setChecked(book.isHasBeenRead());
+        }
     }
 }
