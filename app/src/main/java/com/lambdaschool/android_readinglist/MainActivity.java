@@ -12,30 +12,31 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_BOOK_NEW_TAG = "new-book";
-    public static final String EXTRA_BOOK_EDIT_TAG = "edit-book";
-    public static final String BOOK_DISPLAY_SEPARATOR = ": ";
-    public static final int PADDING_FOR_TEXTVIEW = 15;
-    public static final int TEXTSIZE_FOR_TEXTVIEW = 22;
     public static final String DEFAULT_SHARED_PREFERENCES_KEY = "default_shared_preferences";
     public static SharedPreferences preferences;
-    LinearLayout linearLayout;
+    ScrollView scrollView;
     Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context=this;
 
         preferences = this.getSharedPreferences(DEFAULT_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        SharedPrefsDao.getAllBooks();
 
-        context = this;
-        linearLayout = findViewById(R.id.linear_layout_books);
-        populateViewOfBooks();
+        scrollView = findViewById(R.id.scroll_view);
+        scrollView.removeAllViews();
+        scrollView.addView(BooksController.getBooksView(context));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,38 +81,12 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK/* && requestCode == 1*/) {
             if (data != null) {
                 //super.onActivityResult(requestCode, resultCode, data);
-                String bookInCsv = data.getStringExtra(EXTRA_BOOK_EDIT_TAG);
-                Book bookToAdd = new Book(bookInCsv);
-                BookRepository.addBookToList(bookToAdd);
-                populateViewOfBooks();
+                BooksController.handleEditActivityResult(data);
+                scrollView.removeAllViews();
+                scrollView.addView(BooksController.getBooksView(context));
             }
         }
     }
 
-    public void populateViewOfBooks() {
-//        linearLayout.addView(buildItemView(new Book("0,Harry Potter,Fun,False")));
-//        linearLayout.addView(buildItemView(new Book("1,Where the Red Fern Grows,Adventurous,True")));
-//        linearLayout.addView(buildItemView(new Book("45,Lamb of the Ages,Mind Expanding,False")));
-//        linearLayout.addView(buildItemView(new Book("7000,Star Wars,A sage,True")));
-        linearLayout.removeAllViews();
-        for (int i = 0; i < BookRepository.bookList.size(); i++) {
-            linearLayout.addView(buildItemView(BookRepository.bookList.get(i)));
-        }
-    }
 
-    public TextView buildItemView(final Book book) {
-        TextView textview = new TextView(context);
-        textview.setText(book.getId() + BOOK_DISPLAY_SEPARATOR + book.getTitle());
-        textview.setPadding(PADDING_FOR_TEXTVIEW, PADDING_FOR_TEXTVIEW, PADDING_FOR_TEXTVIEW, PADDING_FOR_TEXTVIEW);
-        textview.setTextSize(TEXTSIZE_FOR_TEXTVIEW);
-        textview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(EXTRA_BOOK_EDIT_TAG, book.toCsvString());
-                startActivityForResult(intent, 1);
-            }
-        });
-        return textview;
-    }
 }

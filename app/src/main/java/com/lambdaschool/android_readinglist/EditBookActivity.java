@@ -3,6 +3,7 @@ package com.lambdaschool.android_readinglist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,7 +36,7 @@ public class EditBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         passedBookId = intent.getStringExtra(MainActivity.EXTRA_BOOK_NEW_TAG);
-        String passedBookCsv = intent.getStringExtra(MainActivity.EXTRA_BOOK_EDIT_TAG);
+        String passedBookCsv = intent.getStringExtra(BooksController.EXTRA_BOOK_EDIT_TAG);
 
         if (passedBookCsv != null) {
             String[] components = passedBookCsv.split(",");
@@ -51,9 +52,14 @@ public class EditBookActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editTextTitle.getText().toString().trim().length() > 0)
+                if (editTextTitle.getText().toString().trim().length() > 0) {
                     returnData();
-                else
+                    Book bookNew = BooksModel.getBookFromId(textViewId.getText().toString());
+                    if (bookNew == null) {
+                        bookNew = new Book(textViewId.getText().toString(), editTextTitle.getText().toString(), editTextReason.getText().toString(), switchRead.isChecked());
+                    }
+                    BooksModel.updateBook(bookNew);
+                } else
                     returnNoData();
             }
         });
@@ -70,22 +76,29 @@ public class EditBookActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (editTextTitle.getText().toString().trim().length() > 0)
+        if (editTextTitle.getText().toString().trim().length() > 0) {
             returnData();
-        else
+            Book bookNew = BooksModel.getBookFromId(textViewId.getText().toString());
+            if (bookNew == null) {
+                bookNew = new Book(textViewId.getText().toString(), editTextTitle.getText().toString(), editTextReason.getText().toString(), switchRead.isChecked());
+            }
+            BooksModel.updateBook(bookNew);
+        } else
             returnNoData();
     }
 
     private void returnData() {
         String bookId = textViewId.getText().toString();
-        if (bookId.equals("") && (passedBookId != null))
+        if (bookId.equals("") && (passedBookId != null)) {
             bookId = passedBookId;
+            textViewId.setText(bookId);
+        }
         String bookTitle = editTextTitle.getText().toString();
         String bookReason = editTextReason.getText().toString();
         boolean bookRead = (switchRead.isChecked());
         Book bookToConstruct = new Book(bookId, bookTitle, bookReason, bookRead);
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_BOOK_EDIT_TAG, bookToConstruct.toCsvString());
+        intent.putExtra(BooksController.EXTRA_BOOK_EDIT_TAG, bookToConstruct.toCsvString());
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -93,7 +106,7 @@ public class EditBookActivity extends AppCompatActivity {
     private void returnNoData() {
         Book bookToConstruct = new Book();
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_BOOK_EDIT_TAG, bookToConstruct.toCsvString());
+        intent.putExtra(BooksController.EXTRA_BOOK_EDIT_TAG, bookToConstruct.toCsvString());
         setResult(RESULT_CANCELED, intent);
         finish();
     }
