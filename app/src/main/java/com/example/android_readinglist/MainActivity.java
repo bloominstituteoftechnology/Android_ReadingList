@@ -3,6 +3,7 @@ package com.example.android_readinglist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -22,18 +23,21 @@ public class MainActivity extends AppCompatActivity  {
 
 
     public static final int REQUEST_CODE_ADD = 123;
+    public static final String SHARED_PREFERENCE_NAME = "firstSharedPreference";
     int readColor = Color.parseColor("#198c19");
     int unreadColor = Color.parseColor("#b20000");
     LinearLayout listLayout;
     ArrayList<Book> bookArrayList;
     Context context;
-    
+    public static SharedPreferences preferences;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.getSharedPreferences(SHARED_PREFERENCE_NAME,MODE_PRIVATE);
         context = this;
         listLayout = findViewById(R.id.scroller_view);
         bookArrayList = new ArrayList<>();
