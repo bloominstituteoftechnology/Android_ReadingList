@@ -28,6 +28,7 @@ public class EditBookActivity extends AppCompatActivity {
         reasonToRead = findViewById(R.id.view_text_reason_to_read);
         checkBox = findViewById(R.id.checkbox_already_read);
 
+        //TODO: change this chunk to check the codes the intent was sent with
         try {
             id = intent.getStringExtra("id");
         } catch(Exception e) {

@@ -1,0 +1,76 @@
+package com.example.readinglist;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static com.example.readinglist.MainActivity.MY_PREFERENCES;
+import static com.example.readinglist.MainActivity.context;
+
+public class SharedPrefsDao {
+    static private String ID_LIST_KEY = "id_list";
+    static private String NEXT_ID_KEY = "next_id";
+    private static final String ENTRY_ITEM_KEY_PREFIX = "entry_";
+    static private SharedPreferences preferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+
+
+
+    public static ArrayList<String> getAllBookIds() { //DONE
+        //Get currently stored string
+        String idList = preferences.getString(ID_LIST_KEY, "");
+        //split string into array of strings
+        String[] oldList = idList.split(",");
+        //initialize arraylist
+        ArrayList<String> ids = new ArrayList<>();
+        //convert array of strings into arraylist
+        if(!idList.equals("")){
+            ids.addAll(Arrays.asList(oldList));
+        }
+        return ids;
+    }
+
+    public static String getNextId() { //DONE
+        String nextId = preferences.getString(NEXT_ID_KEY, "");
+        return nextId;
+    }
+
+    public static Book findBookById(int id) { //Should Return Book CsvString
+        String entryCsv = preferences.getString(ENTRY_ITEM_KEY_PREFIX + id, "invalid");
+        if(!entryCsv.equals("invalid")) {
+            Book book = new Book(entryCsv);
+            return book;
+        } else {
+            return null;
+        }
+    }
+
+    public static void updateBook(Book book) {  //DONE FOR NEW ENTRY
+        //new entry
+        SharedPreferences.Editor editor = preferences.edit();
+        int nextId = preferences.getInt(NEXT_ID_KEY, 0);
+        book.setId(nextId);
+        //store updated next id
+        editor.putInt(NEXT_ID_KEY, ++nextId);
+        //read list of entry ids
+        ArrayList<String> ids = getAllBookIds();
+        //add current id to working memory
+        ids.add(book.getId());
+
+        //store updated id list
+        StringBuilder newIdList = new StringBuilder();
+        for(String id: ids) {
+            newIdList.append(id).append(",");
+        }
+        editor.putString(ID_LIST_KEY, newIdList.toString());
+
+        //store new entry
+        editor.putString((ENTRY_ITEM_KEY_PREFIX + book.getId()), Book.toCsvString(book));
+        editor.apply();
+
+
+    }
+}
+
+

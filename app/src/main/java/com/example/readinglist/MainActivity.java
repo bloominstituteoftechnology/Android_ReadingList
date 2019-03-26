@@ -2,8 +2,8 @@ package com.example.readinglist;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,13 +14,16 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    Context context;
+    public static final String MY_PREFERENCES = "myPreferences";
+    public static Context context;
     LinearLayout linearLayout;
     Button button;
     ArrayList<Book> bookList;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.layout_linear_child);
         context = this;
         bookList = new ArrayList<>();
+        preferences = this.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
 
 
         //Add a couple hardcoded books for testing
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = new TextView(context);
         tv.setText("Title: " + book.getTitle() + "\n Reason To Read: " + book.getReasonToRead() );
         tv.setTextSize(22);
+        tv.setId(linearLayout.getChildCount());
         if (!book.isHasBeenRead()) {
             tv.setTypeface(Typeface.DEFAULT_BOLD);
         }
@@ -88,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("LogTest", "onactivityresult ran successfully");
-        if (true) {
+        //if (true) {
             //TODO: adjust views based on bookList
-        //if (requestCode == 50 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 50 && resultCode == Activity.RESULT_OK) {
             String temp = data.getStringExtra("BOOK_KEY");
             Book book = new Book(temp);
             int indexTemp = Integer.parseInt(book.getId());

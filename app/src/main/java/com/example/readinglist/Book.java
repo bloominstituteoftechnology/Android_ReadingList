@@ -27,7 +27,10 @@ public class Book {
                 book.reasonToRead +   "," +
                 Boolean.toString(book.hasBeenRead);
         return csvString;
+    }
 
+    public void setId(int id){
+        this.id = Integer.toString(id);
     }
 
     public String getTitle() {
