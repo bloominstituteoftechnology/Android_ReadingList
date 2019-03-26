@@ -2,6 +2,7 @@ package com.lambdaschool.android_readinglist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String BOOK_DISPLAY_SEPARATOR = ": ";
     public static final int PADDING_FOR_TEXTVIEW = 15;
     public static final int TEXTSIZE_FOR_TEXTVIEW = 22;
+    public static final String DEFAULT_SHARED_PREFERENCES_KEY = "default_shared_preferences";
+    public static SharedPreferences preferences;
     LinearLayout linearLayout;
     Context context;
 
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        preferences = this.getSharedPreferences(DEFAULT_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
 
         context = this;
         linearLayout = findViewById(R.id.linear_layout_books);
@@ -89,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 //        linearLayout.addView(buildItemView(new Book("45,Lamb of the Ages,Mind Expanding,False")));
 //        linearLayout.addView(buildItemView(new Book("7000,Star Wars,A sage,True")));
         linearLayout.removeAllViews();
-        for (int i =0; i < BookRepository.bookList.size(); i++) {
+        for (int i = 0; i < BookRepository.bookList.size(); i++) {
             linearLayout.addView(buildItemView(BookRepository.bookList.get(i)));
         }
     }
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra(EXTRA_BOOK_EDIT_TAG, book.toCsvString());
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
         return textview;

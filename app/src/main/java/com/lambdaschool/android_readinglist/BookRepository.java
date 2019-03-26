@@ -8,7 +8,6 @@ public class BookRepository {
     public static void addBookToList(Book bookToAdd) {
         removeBookFromList(bookToAdd);
         bookList.add(bookToAdd);
-
     }
 
     public static void removeBookFromList(Book bookToRemove) {
@@ -38,5 +37,27 @@ public class BookRepository {
         }
 
         return Integer.toString(newId);
+    }
+
+    public static void updateBookInList(Book booktoUpdate) {
+        for (int i = 0; i < bookList.size(); i++) {
+            Book bookInList = bookList.get(i);
+
+            if (bookInList.getId().equals(booktoUpdate.getId())) {
+                bookList.remove(i);
+                bookList.add(i, booktoUpdate);
+            }
+        }
+    }
+
+    public static String getBookCsvFromId(String id) {
+        for (int i = 0; i < bookList.size(); i++) {
+            Book bookInList = bookList.get(i);
+
+            if (bookInList.getId().equals(id)) {
+                return bookInList.toCsvString();
+            }
+        }
+        return null;
     }
 }
