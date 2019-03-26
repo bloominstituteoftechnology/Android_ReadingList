@@ -39,6 +39,7 @@ public class EditBookActivity extends AppCompatActivity {
             Book book = new Book(bookCsv);
             name.setText(book.getTitle());
             reasonToRead.setText(book.getReasonToRead());
+            checkBox.setChecked(book.hasBeenRead);
             id = book.getId();
 
         } catch(Exception e ) {

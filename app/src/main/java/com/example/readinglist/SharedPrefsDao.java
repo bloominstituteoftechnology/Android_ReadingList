@@ -47,7 +47,7 @@ public class SharedPrefsDao {
 
     }
 
-    public static void updateBook(Book book) {  //DONE FOR NEW ENTRY TODO: add functionality for edited entry
+    public static void updateBook(Book book) {  //DONE
 
         SharedPreferences.Editor editor = preferences.edit();
         if(Integer.parseInt(book.getId()) >= BooksModel.findNextBookId()) {
