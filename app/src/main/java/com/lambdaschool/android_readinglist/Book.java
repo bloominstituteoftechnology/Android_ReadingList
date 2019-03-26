@@ -7,6 +7,13 @@ public class Book implements Serializable {
     private String id, title, reasonToRead;
     private boolean hasBeenRead;
 
+    public Book() {
+        this.id = BookRepository.generateId();
+        this.title = "";
+        this.reasonToRead = "";
+        this.hasBeenRead = false;
+    }
+
     public Book(String id, String title, String reasonToRead, boolean hasBeenRead) {
         this.id = id;
         this.title = title;

@@ -3,6 +3,7 @@ package com.lambdaschool.android_readinglist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String BOOK_DISPLAY_SEPARATOR = ": ";
     public static final int PADDING_FOR_TEXTVIEW = 15;
     public static final int TEXTSIZE_FOR_TEXTVIEW = 22;
+    LinearLayout linearLayout;
     Context context;
 
     @Override
@@ -27,11 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         context = this;
-        final LinearLayout linearLayout = findViewById(R.id.linear_layout_books);
-        linearLayout.addView(buildItemView(new Book("0,Harry Potter,Fun,False")));
-        linearLayout.addView(buildItemView(new Book("1,Where the Red Fern Grows,Adventurous,True")));
-        linearLayout.addView(buildItemView(new Book("45,Lamb of the Ages,Mind Expanding,False")));
-        linearLayout.addView(buildItemView(new Book("7000,Star Wars,A sage,True")));
+        linearLayout = findViewById(R.id.linear_layout_books);
+        populateViewOfBooks();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
 /*                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(EXTRA_BOOK_NEW_TAG, linearLayout.getChildCount());
-                startActivity(intent);
+                intent.putExtra(EXTRA_BOOK_NEW_TAG, BookRepository.generateId());
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -71,6 +70,30 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK/* && requestCode == 1*/) {
+            if (data != null) {
+                //super.onActivityResult(requestCode, resultCode, data);
+                String bookInCsv = data.getStringExtra(EXTRA_BOOK_EDIT_TAG);
+                Book bookToAdd = new Book(bookInCsv);
+                BookRepository.addBookToList(bookToAdd);
+                populateViewOfBooks();
+            }
+        }
+    }
+
+    public void populateViewOfBooks() {
+//        linearLayout.addView(buildItemView(new Book("0,Harry Potter,Fun,False")));
+//        linearLayout.addView(buildItemView(new Book("1,Where the Red Fern Grows,Adventurous,True")));
+//        linearLayout.addView(buildItemView(new Book("45,Lamb of the Ages,Mind Expanding,False")));
+//        linearLayout.addView(buildItemView(new Book("7000,Star Wars,A sage,True")));
+        linearLayout.removeAllViews();
+        for (int i =0; i < BookRepository.bookList.size(); i++) {
+            linearLayout.addView(buildItemView(BookRepository.bookList.get(i)));
+        }
+    }
+
     public TextView buildItemView(final Book book) {
         TextView textview = new TextView(context);
         textview.setText(book.getId() + BOOK_DISPLAY_SEPARATOR + book.getTitle());
@@ -79,10 +102,9 @@ public class MainActivity extends AppCompatActivity {
         textview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,EditBookActivity.class);
-                String csv=book.toCsvString();
-                intent.putExtra(EXTRA_BOOK_EDIT_TAG, csv);
-                startActivity(intent);
+                Intent intent = new Intent(context, EditBookActivity.class);
+                intent.putExtra(EXTRA_BOOK_EDIT_TAG, book.toCsvString());
+                startActivityForResult(intent,1);
             }
         });
         return textview;
