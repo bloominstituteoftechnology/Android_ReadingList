@@ -9,6 +9,9 @@ import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import static com.example.readinglist.MainActivity.ADD_REQUEST_CODE;
+import static com.example.readinglist.MainActivity.EDIT_REQUEST_CODE;
+
 public class EditBookActivity extends AppCompatActivity {
     String id;
     String bookCsv;
@@ -28,25 +31,19 @@ public class EditBookActivity extends AppCompatActivity {
         reasonToRead = findViewById(R.id.view_text_reason_to_read);
         checkBox = findViewById(R.id.checkbox_already_read);
 
-        //TODO: change this chunk to check the codes the intent was sent with
-        try {
+        //Checks the request code the intent was sent with to either populate all values or just the ID (constants imported)
+        int requestCode = intent.getIntExtra("RequestCode", 0);
+        if (requestCode == ADD_REQUEST_CODE) {
             id = intent.getStringExtra("id");
-        } catch(Exception e) {
-            Log.i ("ID Setter", "Failed to set ID via button");
         }
-        try {
+        else if (requestCode == EDIT_REQUEST_CODE) {
             bookCsv = intent.getStringExtra("BookCsv");
             Book book = new Book(bookCsv);
             name.setText(book.getTitle());
             reasonToRead.setText(book.getReasonToRead());
             checkBox.setChecked(book.hasBeenRead);
             id = book.getId();
-
-        } catch(Exception e ) {
-            Log.i("ID Setter", "Failed to get Book object");
         }
-
-
 
     }
 

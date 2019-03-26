@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static final String MY_PREFERENCES = "myPreferences";
+    public static final int EDIT_REQUEST_CODE = 44;
+    public static final int ADD_REQUEST_CODE = 55;
     public static Context context;
     LinearLayout linearLayout;
     Button button;
@@ -52,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 int temp = BooksModel.findNextBookId();
                 String id = Integer.toString(temp);
                 intent.putExtra("id", id);
-                startActivityForResult(intent, 50);
+                intent.putExtra("RequestCode", ADD_REQUEST_CODE);
+                startActivityForResult(intent, ADD_REQUEST_CODE);
             }
         });
 
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = new TextView(context);
         tv.setText("Title: " + book.getTitle() + "\n Reason To Read: " + book.getReasonToRead() );
         tv.setTextSize(22);
-        tv.setId(linearLayout.getChildCount());
+        tv.setId(Integer.parseInt(book.getId()));
         if (!book.isHasBeenRead()) {
             tv.setTypeface(Typeface.DEFAULT_BOLD);
         }
@@ -84,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 //handles the case of tapping an already existing book
                 String temp = Book.toCsvString(book);
                 intent.putExtra("BookCsv", temp);
-                startActivityForResult(intent, 50);
+                intent.putExtra("RequestCode", EDIT_REQUEST_CODE);
+                startActivityForResult(intent, EDIT_REQUEST_CODE);
             }
         });
         return tv;
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("LogTest", "onactivityresult ran successfully");
         //if (true) {
-        if (requestCode == 50 && resultCode == Activity.RESULT_OK) {
+        if ((requestCode == 55 || requestCode == 44) && resultCode == Activity.RESULT_OK) {
             String temp = data.getStringExtra("BOOK_KEY");
             Book book = new Book(temp);
             BooksModel.saveBook(book);
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 bookList.set (indexTemp, book);
             }
             bookList = BooksModel.findAllBooks();
+            linearLayout.removeAllViews();
             for (Book bookTemp : bookList) {
                 linearLayout.addView(BuildItemView(bookTemp));
             }

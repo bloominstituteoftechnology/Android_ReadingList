@@ -71,17 +71,9 @@ public class SharedPrefsDao {
             }
             editor.putString(ID_LIST_KEY, newIdList.toString());
         }
-
             //store entry (new or edited, it doesn't matter which)
             editor.putString((ENTRY_ITEM_KEY_PREFIX + book.getId()), Book.toCsvString(book));
             editor.apply();
-
-//
-//
-//
-//
-//        }
-
     }
 }
 
