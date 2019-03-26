@@ -13,6 +13,10 @@ public class BookRepository {
         return bookList.get(index);
     }
 
+    public static void replaceBook(int index, Book book) {
+        bookList.set(index, book);
+    }
+
     public static ArrayList<Book> getBookList() {
         return bookList;
     }

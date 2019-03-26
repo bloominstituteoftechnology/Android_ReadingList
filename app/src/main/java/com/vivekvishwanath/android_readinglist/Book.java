@@ -1,6 +1,8 @@
 package com.vivekvishwanath.android_readinglist;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     private String id;
     private String title;
     private String reasonToRead;
@@ -18,7 +20,7 @@ public class Book {
 
     public Book (String csvString) {
         String[] bookValues = csvString.split(",");
-        if (bookValues.length == 5) {
+        if (bookValues.length == 4) {
             this.id = bookValues[0];
             this.title = bookValues[1].replace("~@", ",");
             this.reasonToRead = bookValues[2].replace("~@", ",");
@@ -34,7 +36,7 @@ public class Book {
                 id,
                 title.replace(",", "~@"),
                 reasonToRead.replace(",", "~@"),
-                hasBeenRead ? "true" : "false");
+                hasBeenRead);
     }
 
     public String getId() {

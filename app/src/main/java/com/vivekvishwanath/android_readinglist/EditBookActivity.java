@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,15 +28,21 @@ public class EditBookActivity extends AppCompatActivity {
         bookNameText = findViewById(R.id.book_name_text);
         bookReasonText = findViewById(R.id.book_reason_text);
         readSwitch = findViewById(R.id.read_switch);
-
         saveButton = findViewById(R.id.save_button);
+        cancelButton = findViewById(R.id.cancel_button);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 returnData();
             }
         });
-        cancelButton = findViewById(R.id.cancel_button);
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +51,7 @@ public class EditBookActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        id = intent.getStringExtra(Book.NEW_BOOK_TAG);
+        id = intent.getStringExtra("Book");
         String bookCsv = intent.getStringExtra(Book.EDIT_BOOK_TAG);
         if (bookCsv != null) {
             Book book = new Book(bookCsv);
@@ -57,6 +65,7 @@ public class EditBookActivity extends AppCompatActivity {
     private void returnData() {
         String bookName = bookNameText.getText().toString();
         String bookReason = bookReasonText.getText().toString();
+        boolean switchStatus = readSwitch.isChecked();
         Book book = new Book(id, bookName, bookReason, readSwitch.isChecked());
         String bookCsv = book.toCsvString();
         Intent intent = new Intent();
