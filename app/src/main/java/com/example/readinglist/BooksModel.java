@@ -9,7 +9,7 @@ import static com.example.readinglist.SharedPrefsDao.getAllBookIds;
 
 public class BooksModel {
 
-    public ArrayList<Book> findAllBooks(){
+    public static ArrayList<Book> findAllBooks(){
         ArrayList<String> allBookIds = SharedPrefsDao.getAllBookIds();
         ArrayList<Book> allBooks = new ArrayList<>();
         for (String id: allBookIds) {
@@ -28,11 +28,11 @@ public class BooksModel {
             return null;
         }
     }
-    public int findNextBookId() {
+    public static int findNextBookId() {
         return Integer.parseInt(SharedPrefsDao.getNextId());
     }
 
-    public void saveBook(Book book){
+    public static void saveBook(Book book){
         SharedPrefsDao.updateBook(book);
     }
 

@@ -47,7 +47,7 @@ public class SharedPrefsDao {
 
     }
 
-    public static void updateBook(Book book) {  //DONE FOR NEW ENTRY
+    public static void updateBook(Book book) {  //DONE FOR NEW ENTRY TODO: add functionality for edited entry
         //new entry
         SharedPreferences.Editor editor = preferences.edit();
         int nextId = preferences.getInt(NEXT_ID_KEY, 0);
@@ -69,6 +69,9 @@ public class SharedPrefsDao {
         //store new entry
         editor.putString((ENTRY_ITEM_KEY_PREFIX + book.getId()), Book.toCsvString(book));
         editor.apply();
+
+        //update Entry
+
 
 
     }

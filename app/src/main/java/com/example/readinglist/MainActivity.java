@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Add a couple hardcoded books for testing
-        bookList.add(new Book("0,The Martian,I like Martians,1"));
-        bookList.add(new Book("1,The Girl on The Train,I like Trains,1"));
+//        bookList.add(new Book("0,The Martian,I like Martians,1"));
+//        bookList.add(new Book("1,The Girl on The Train,I like Trains,1"));
+        bookList = BooksModel.findAllBooks();
         for (Book book: bookList) {
             linearLayout.addView(BuildItemView(book));
         }
@@ -94,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("LogTest", "onactivityresult ran successfully");
         //if (true) {
-            //TODO: adjust views based on bookList
         if (requestCode == 50 && resultCode == Activity.RESULT_OK) {
             String temp = data.getStringExtra("BOOK_KEY");
             Book book = new Book(temp);
+            BooksModel.saveBook(book);
             int indexTemp = Integer.parseInt(book.getId());
             //Will decide whether to add the book to the list, or to change a currently held book
             if (bookList.size() <= indexTemp){
@@ -105,7 +106,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 bookList.set (indexTemp, book);
             }
-            linearLayout.addView(BuildItemView(book));
+            bookList = BooksModel.findAllBooks();
+            for (Book booktemp : bookList) {
+                linearLayout.addView(BuildItemView(booktemp));
+            }
 
         }
     }
