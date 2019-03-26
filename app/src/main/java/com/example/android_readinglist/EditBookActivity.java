@@ -45,7 +45,8 @@ public class EditBookActivity extends AppCompatActivity {
         if (bookIntent.getStringExtra("editBook") != null) {
 
             bookString = bookIntent.getStringExtra("editBook");
-            editableBook = thisBook.createBook(bookString);
+//            editableBook = thisBook.createBook(bookString);
+            editableBook = new Book(bookString);
             editableBook.setId(id);
             bookNameText.setText(editableBook.getTitle());
             idText.setText(editableBook.getId());
@@ -55,7 +56,7 @@ public class EditBookActivity extends AppCompatActivity {
 
         //if creating new book
         else {
-            editableBook = new Book(id);
+            editableBook = new Book();
         }
 
 
@@ -126,6 +127,7 @@ public class EditBookActivity extends AppCompatActivity {
 // method to grab info, build into a book object, then convert to string, then send results back to main.
     private void returnData(){
         Intent returnIntent = new Intent(context,MainActivity.class);
+        editableBook.setId(id);
         editableBook.setTitle(title);
         editableBook.setReasonToRead(reasonToRead);
         editableBook.setHasBeenRead(readSwitch.isChecked());

@@ -18,18 +18,16 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements Serializable {
+public class MainActivity extends AppCompatActivity  {
 
 
     public static final int REQUEST_CODE_ADD = 123;
     int readColor = Color.parseColor("#198c19");
     int unreadColor = Color.parseColor("#b20000");
     LinearLayout listLayout;
-    ArrayList<Book> bookArrayList = new ArrayList<>();
-    Button addButton;
+    ArrayList<Book> bookArrayList;
     Context context;
-    int nextId;
-    Book createdBook;
+    
 
 
     @Override
@@ -38,19 +36,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);
         context = this;
         listLayout = findViewById(R.id.scroller_view);
+        bookArrayList = new ArrayList<>();
 
-        /*
 
-        bookArrayList.add(book1);
-        bookArrayList.add(book2);
-        bookArrayList.add(book3);
-        bookArrayList.add(book4);
-        bookArrayList.add(book5);
-        bookArrayList.add(book6);
-*/
-
-        for(Book books:bookArrayList){
-            buildItemView(books);        }
 
 
         findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
@@ -59,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 Intent editActivity = new Intent (context, EditBookActivity.class);
                  int  id =listLayout.getChildCount();
                  String stringId = Integer.toString(id);
-                editActivity.putExtra("id",stringId);
+                 editActivity.putExtra("id",stringId);
                  startActivityForResult(editActivity, REQUEST_CODE_ADD);
             }
         });
@@ -90,14 +78,17 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == Activity.RESULT_OK){
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_ADD){
             if (data!=null){
-                data = getIntent();
-                String returnedBook = data.getStringExtra("returnedBook");
-                Book book = createdBook.createBook(returnedBook);
+//                data = getIntent();
+                String returnedBookString = data.getStringExtra("returnedBook");
+                Book book = new Book(returnedBookString);
                 bookArrayList.add(book);
 
             }
+            for(Book books:bookArrayList){
+               listLayout.removeAllViews();
+                buildItemView(books);        }
         }
 
 
