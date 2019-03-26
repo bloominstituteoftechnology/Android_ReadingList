@@ -6,4 +6,5 @@ public class Constants {
     public static final String NEW_BOOK_TAG = "New Book";
     public static final String EDIT_BOOK_TAG = "Edit Book";
     public static final String BOOK_PREFERENCES = "BookPreferences";
+    public static final int INVALID_ID = -1;
 }
