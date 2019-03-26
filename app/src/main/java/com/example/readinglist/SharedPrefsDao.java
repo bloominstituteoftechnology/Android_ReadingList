@@ -36,14 +36,15 @@ public class SharedPrefsDao {
         return nextId;
     }
 
-    public static Book findBookById(int id) { //Should Return Book CsvString
-        String entryCsv = preferences.getString(ENTRY_ITEM_KEY_PREFIX + id, "invalid");
-        if(!entryCsv.equals("invalid")) {
+    public static String findBookById(int id) { //Should Return Book CsvString
+        return preferences.getString(ENTRY_ITEM_KEY_PREFIX + id, "invalid");
+        /*if(!entryCsv.equals("invalid")) {
             Book book = new Book(entryCsv);
             return book;
         } else {
             return null;
-        }
+        }*/
+
     }
 
     public static void updateBook(Book book) {  //DONE FOR NEW ENTRY
