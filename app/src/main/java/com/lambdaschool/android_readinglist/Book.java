@@ -1,6 +1,8 @@
 package com.lambdaschool.android_readinglist;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     public static final String REPLACEMENT_FOR_COMMAS = "~@";
     private String id, title, reasonToRead;
     private boolean hasBeenRead;
@@ -37,7 +39,7 @@ public class Book {
         return reasonToRead;
     }
 
-    public boolean isHasBeenRead() {
+    public boolean hasBeenRead() {
         return hasBeenRead;
     }
 }
