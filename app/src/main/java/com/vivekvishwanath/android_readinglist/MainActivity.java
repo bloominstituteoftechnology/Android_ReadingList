@@ -2,6 +2,7 @@ package com.vivekvishwanath.android_readinglist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,14 +19,15 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     Button addBookButton;
     LinearLayout bookViewLayout;
-    public static final int NEW_BOOK_REQUEST_CODE = 2;
-    public static final int EDIT_BOOK_REQUEST_CODE = 3;
+
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+        preferences = getSharedPreferences(Constants.DEFAULT_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
 
         addBookButton = findViewById(R.id.add_book_button);
         addBookButton.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra("Book", String.valueOf(bookViewLayout.getChildCount()));
-                startActivityForResult(intent, NEW_BOOK_REQUEST_CODE);
+                startActivityForResult(intent, Constants.NEW_BOOK_REQUEST_CODE);
             }
         });
         bookViewLayout = findViewById(R.id.book_view_layout);
@@ -58,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(Book.EDIT_BOOK_TAG, book.toCsvString());
-                startActivityForResult(intent, EDIT_BOOK_REQUEST_CODE);
+                intent.putExtra(Constants.EDIT_BOOK_TAG, book.toCsvString());
+                startActivityForResult(intent, Constants.EDIT_BOOK_REQUEST_CODE);
             }
         });
         return bookView;
@@ -67,18 +69,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == NEW_BOOK_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == Constants.NEW_BOOK_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                String bookCsv = data.getStringExtra(Book.EDIT_BOOK_TAG);
+                String bookCsv = data.getStringExtra(Constants.EDIT_BOOK_TAG);
                 Book book = new Book(bookCsv);
                 BookRepository.addBook(book);
                 ArrayList<Book> books = BookRepository.getBookList();
                 int i = 0;
             }
         }
-        if (requestCode == EDIT_BOOK_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == Constants.EDIT_BOOK_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                String bookCsv = data.getStringExtra(Book.EDIT_BOOK_TAG);
+                String bookCsv = data.getStringExtra(Constants.EDIT_BOOK_TAG);
                 Book book = new Book(bookCsv);
                 if (Integer.parseInt(book.getId()) < BookRepository.getBookList().size()) {
                     BookRepository.replaceBook(Integer.parseInt(book.getId()), book);

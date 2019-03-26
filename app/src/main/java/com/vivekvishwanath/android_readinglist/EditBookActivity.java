@@ -52,7 +52,7 @@ public class EditBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         id = intent.getStringExtra("Book");
-        String bookCsv = intent.getStringExtra(Book.EDIT_BOOK_TAG);
+        String bookCsv = intent.getStringExtra(Constants.EDIT_BOOK_TAG);
         if (bookCsv != null) {
             Book book = new Book(bookCsv);
             bookNameText.setText(book.getTitle());
@@ -69,7 +69,7 @@ public class EditBookActivity extends AppCompatActivity {
         Book book = new Book(id, bookName, bookReason, readSwitch.isChecked());
         String bookCsv = book.toCsvString();
         Intent intent = new Intent();
-        intent.putExtra(Book.EDIT_BOOK_TAG, bookCsv);
+        intent.putExtra(Constants.EDIT_BOOK_TAG, bookCsv);
         setResult(RESULT_OK, intent);
         finish();
     }
