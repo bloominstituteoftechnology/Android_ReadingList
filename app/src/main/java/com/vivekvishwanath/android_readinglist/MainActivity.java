@@ -20,14 +20,14 @@ public class MainActivity extends AppCompatActivity {
     Button addBookButton;
     LinearLayout bookViewLayout;
 
-    SharedPreferences preferences;
+    static SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        preferences = getSharedPreferences(Constants.DEFAULT_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.BOOK_PREFERENCES, Context.MODE_PRIVATE);
 
         addBookButton = findViewById(R.id.add_book_button);
         addBookButton.setOnClickListener(new View.OnClickListener() {
