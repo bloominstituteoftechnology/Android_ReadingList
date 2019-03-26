@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditBookActivity.class);
                 //handles the case of pushing the button
-                String id = Integer.toString(linearLayout.getChildCount());
+                int temp = BooksModel.findNextBookId();
+                String id = Integer.toString(temp);
                 intent.putExtra("id", id);
                 startActivityForResult(intent, 50);
             }
@@ -107,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 bookList.set (indexTemp, book);
             }
             bookList = BooksModel.findAllBooks();
-            for (Book booktemp : bookList) {
-                linearLayout.addView(BuildItemView(booktemp));
+            for (Book bookTemp : bookList) {
+                linearLayout.addView(BuildItemView(bookTemp));
             }
 
         }

@@ -32,7 +32,7 @@ public class SharedPrefsDao {
     }
 
     public static String getNextId() { //DONE
-        String nextId = preferences.getString(NEXT_ID_KEY, "");
+        String nextId = preferences.getString(NEXT_ID_KEY, "0");
         return nextId;
     }
 
@@ -48,31 +48,39 @@ public class SharedPrefsDao {
     }
 
     public static void updateBook(Book book) {  //DONE FOR NEW ENTRY TODO: add functionality for edited entry
-        //new entry
+
         SharedPreferences.Editor editor = preferences.edit();
-        int nextId = preferences.getInt(NEXT_ID_KEY, 0);
-        book.setId(nextId);
-        //store updated next id
-        editor.putInt(NEXT_ID_KEY, ++nextId);
-        //read list of entry ids
-        ArrayList<String> ids = getAllBookIds();
-        //add current id to working memory
-        ids.add(book.getId());
+        if(Integer.parseInt(book.getId()) >= BooksModel.findNextBookId()) {
 
-        //store updated id list
-        StringBuilder newIdList = new StringBuilder();
-        for(String id: ids) {
-            newIdList.append(id).append(",");
+            //find old next id, in order to update it
+            String nextId = preferences.getString(NEXT_ID_KEY, "0");
+            //increment and store nextId String
+            int nextIdInt = Integer.parseInt(nextId);
+            nextIdInt++;
+            nextId = Integer.toString(nextIdInt);
+            editor.putString(NEXT_ID_KEY, (nextId));
+            //read list of entry ids
+            ArrayList<String> ids = getAllBookIds();
+            //add current id to working memory
+            ids.add(book.getId());
+
+            //store updated id list
+            StringBuilder newIdList = new StringBuilder();
+            for (String id : ids) {
+                newIdList.append(id).append(",");
+            }
+            editor.putString(ID_LIST_KEY, newIdList.toString());
         }
-        editor.putString(ID_LIST_KEY, newIdList.toString());
 
-        //store new entry
-        editor.putString((ENTRY_ITEM_KEY_PREFIX + book.getId()), Book.toCsvString(book));
-        editor.apply();
+            //store entry (new or edited, it doesn't matter which)
+            editor.putString((ENTRY_ITEM_KEY_PREFIX + book.getId()), Book.toCsvString(book));
+            editor.apply();
 
-        //update Entry
-
-
+//
+//
+//
+//
+//        }
 
     }
 }
