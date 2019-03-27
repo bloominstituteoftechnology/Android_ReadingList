@@ -1,5 +1,6 @@
 package com.lambdaschool.android_readinglist;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
@@ -41,7 +42,7 @@ public class BooksController {
                 Intent intent = new Intent(context, EditBookActivity.class);
                 intent.putExtra(EXTRA_BOOK_EDIT_TAG, book.toCsvString());
                 handleEditActivityResult(intent);
-                //android.support.v4.app.FragmentActivity.startActivityForResult(intent, 0);
+                ((Activity)context).startActivityForResult(intent, 0);
             }
         });
         return textview;
@@ -51,6 +52,5 @@ public class BooksController {
         String bookInCsv = intent.getStringExtra(EXTRA_BOOK_EDIT_TAG);
         Book bookToAdd = new Book(bookInCsv);
         BookRepository.addBookToList(bookToAdd);
-
     }
 }
