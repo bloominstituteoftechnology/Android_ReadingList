@@ -51,7 +51,7 @@ public class EditBookActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("Book");
+        id = intent.getStringExtra(Constants.NEW_BOOK_TAG);
         String bookCsv = intent.getStringExtra(Constants.EDIT_BOOK_TAG);
         if (bookCsv != null) {
             Book book = new Book(bookCsv);

@@ -8,11 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout bookViewLayout;
 
     static SharedPreferences preferences;
+    private static ArrayList<Book> bookList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra("Book", String.valueOf(bookViewLayout.getChildCount()));
+                intent.putExtra(Constants.NEW_BOOK_TAG, String.valueOf(bookViewLayout.getChildCount()));
                 startActivityForResult(intent, Constants.NEW_BOOK_REQUEST_CODE);
             }
         });
@@ -46,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         bookViewLayout.removeAllViews();
-        for (int i = 0; i < BookRepository.getBookList().size(); i++) {
-            TextView bookView = buildItemView(BookRepository.getBook(i));
+        for (int i = 0; i < bookList.size(); i++) {
+            TextView bookView = buildItemView(bookList.get(i));
             bookViewLayout.addView(bookView);
         }
     }
@@ -73,18 +72,15 @@ public class MainActivity extends AppCompatActivity {
             if (data != null) {
                 String bookCsv = data.getStringExtra(Constants.EDIT_BOOK_TAG);
                 Book book = new Book(bookCsv);
-                BookRepository.addBook(book);
-                ArrayList<Book> books = BookRepository.getBookList();
-                int i = 0;
+                bookList.add(book);
             }
         }
         if (requestCode == Constants.EDIT_BOOK_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 String bookCsv = data.getStringExtra(Constants.EDIT_BOOK_TAG);
                 Book book = new Book(bookCsv);
-                if (Integer.parseInt(book.getId()) < BookRepository.getBookList().size()) {
-                    BookRepository.replaceBook(Integer.parseInt(book.getId()), book);
-
+                if (Integer.parseInt(book.getId()) < bookList.size()) {
+                      bookList.set(Integer.parseInt(book.getId()), book);
                 }
             }
         }
