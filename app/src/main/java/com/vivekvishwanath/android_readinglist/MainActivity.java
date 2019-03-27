@@ -14,9 +14,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    Context context;
+    static Context context;
     Button addBookButton;
-    LinearLayout bookViewLayout;
 
     static SharedPreferences preferences;
     private static ArrayList<Book> bookList = new ArrayList<>();
@@ -37,34 +36,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, Constants.NEW_BOOK_REQUEST_CODE);
             }
         });
-        bookViewLayout = findViewById(R.id.book_view_layout);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        bookViewLayout.removeAllViews();
-        for (int i = 0; i < bookList.size(); i++) {
-            TextView bookView = buildItemView(bookList.get(i));
-            bookViewLayout.addView(bookView);
-        }
+
     }
 
-    private TextView buildItemView(final Book book) {
-        TextView bookView = new TextView(context);
-        bookView.setText(book.getTitle());
-        bookView.setTextSize(18);
-        bookView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(Constants.EDIT_BOOK_TAG, book.toCsvString());
-                startActivityForResult(intent, Constants.EDIT_BOOK_REQUEST_CODE);
-            }
-        });
-        return bookView;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
