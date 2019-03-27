@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    ScrollView bookScrollView;
     static Context context;
     Button addBookButton;
 
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = this;
         preferences = getSharedPreferences(Constants.BOOK_PREFERENCES, Context.MODE_PRIVATE);
+
+        bookScrollView = findViewById(R.id.book_scroll_view);
+        bookScrollView.addView(BooksController.getBooksView(context));
 
         addBookButton = findViewById(R.id.add_book_button);
         addBookButton.setOnClickListener(new View.OnClickListener() {

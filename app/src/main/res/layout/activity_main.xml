@@ -8,17 +8,11 @@
     android:padding="10dp">
 
     <ScrollView
+        android:id="@+id/book_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@id/add_book_button"
         app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/book_view_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </LinearLayout>
 
     </ScrollView>
 
