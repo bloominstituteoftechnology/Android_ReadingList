@@ -2,7 +2,7 @@ package com.vivekvishwanath.android_readinglist;
 
 import java.io.Serializable;
 
-public class Book implements Serializable {
+public class Book {
     private String id;
     private String title;
     private String reasonToRead;
