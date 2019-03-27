@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ScrollView bookScrollView;
-    static Context context;
+    Context context;
     Button addBookButton;
 
     static SharedPreferences preferences;
@@ -26,17 +26,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+
         preferences = getSharedPreferences(Constants.BOOK_PREFERENCES, Context.MODE_PRIVATE);
+         SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit(); 
 
         bookScrollView = findViewById(R.id.book_scroll_view);
-        bookScrollView.addView(BooksController.getBooksView(context));
 
         addBookButton = findViewById(R.id.add_book_button);
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(Constants.NEW_BOOK_TAG, Integer.toString(BookModel.nextId()));
+                String nextId = Integer.toString(BookModel.nextId());
+                intent.putExtra(Constants.NEW_BOOK_TAG, nextId);
                 startActivityForResult(intent, Constants.NEW_BOOK_REQUEST_CODE);
             }
         });
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        bookScrollView.removeAllViews();
+        bookScrollView.addView(BooksController.getBooksView(context));
 
     }
 

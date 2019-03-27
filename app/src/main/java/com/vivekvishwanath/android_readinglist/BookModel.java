@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class BookModel {
 
     public static Book[] getBookArray() {
-        Book [] books = new Book[Integer.parseInt(SharedPrefsDao.getNextId()) -1];
+        Book [] books = new Book[Integer.parseInt(SharedPrefsDao.getNextId())];
         for (int i = 0; i < books.length; i++) {
             String bookCsv = SharedPrefsDao.getBookCsv(Integer.toString(i));
             books[i] = new Book(bookCsv);

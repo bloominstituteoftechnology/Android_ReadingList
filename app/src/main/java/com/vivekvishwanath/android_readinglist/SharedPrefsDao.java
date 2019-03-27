@@ -18,8 +18,7 @@ public class SharedPrefsDao {
     }
 
     public static String getNextId() {
-        String nextId = MainActivity.preferences.getString(NEXT_ID_KEY, "0");
-        return nextId;
+        return MainActivity.preferences.getString(NEXT_ID_KEY, "0");
     }
 
     public static String getBookCsv(String id) {
@@ -34,10 +33,10 @@ public class SharedPrefsDao {
         ArrayList<String> idList = new ArrayList<>(parsedIds.length);
         idList.addAll(Arrays.asList(parsedIds));
         // new entry
-        if (Integer.parseInt(book.getId()) == Constants.INVALID_ID && !idList.contains(book.getId())) {
-            int nextId = MainActivity.preferences.getInt(NEXT_ID_KEY, 0);
+        if (!idList.contains(book.getId())) {
+            int nextId = Integer.parseInt(MainActivity.preferences.getString(NEXT_ID_KEY, "0"));
             book.setId(String.valueOf(nextId));
-            editor.putInt(NEXT_ID_KEY, ++nextId);
+            editor.putString(NEXT_ID_KEY, Integer.toString(++nextId));
             idList.add(book.getId());
             StringBuilder ids = new StringBuilder();
             for (String id : idList) {

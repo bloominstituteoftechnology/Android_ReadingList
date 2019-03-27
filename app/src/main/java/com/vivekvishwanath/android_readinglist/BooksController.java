@@ -28,7 +28,7 @@ public class BooksController {
     public static LinearLayout getBooksView (Context context) {
         Book[] books = BookModel.getBookArray();
         LinearLayout booksView = new LinearLayout(context);
-        booksView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        booksView.setOrientation(LinearLayout.VERTICAL);
         for (Book book : books) {
             booksView.addView(buildItemView(book, context));
         }
