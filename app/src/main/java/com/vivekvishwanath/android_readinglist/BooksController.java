@@ -34,4 +34,10 @@ public class BooksController {
         }
         return booksView;
     }
+
+    public static void handleEditActivityResult (Intent intent) {
+        String bookCsv = intent.getStringExtra(Constants.EDIT_BOOK_TAG);
+        Book book = new Book(bookCsv);
+        BookModel.updateBook(book);
+    }
 }

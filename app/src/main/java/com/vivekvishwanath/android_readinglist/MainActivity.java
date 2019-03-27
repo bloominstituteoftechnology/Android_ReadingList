@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     Button addBookButton;
 
     static SharedPreferences preferences;
-    private static ArrayList<Book> bookList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditBookActivity.class);
-                intent.putExtra(Constants.NEW_BOOK_TAG, String.valueOf(bookViewLayout.getChildCount()));
+                intent.putExtra(Constants.NEW_BOOK_TAG, Integer.toString(BookModel.nextId()));
                 startActivityForResult(intent, Constants.NEW_BOOK_REQUEST_CODE);
             }
         });
@@ -50,18 +49,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == Constants.NEW_BOOK_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                String bookCsv = data.getStringExtra(Constants.EDIT_BOOK_TAG);
-                Book book = new Book(bookCsv);
-                bookList.add(book);
+                BooksController.handleEditActivityResult(data);
             }
         }
         if (requestCode == Constants.EDIT_BOOK_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                String bookCsv = data.getStringExtra(Constants.EDIT_BOOK_TAG);
-                Book book = new Book(bookCsv);
-                if (Integer.parseInt(book.getId()) < bookList.size()) {
-                      bookList.set(Integer.parseInt(book.getId()), book);
-                }
+                BooksController.handleEditActivityResult(data);
             }
         }
     }
