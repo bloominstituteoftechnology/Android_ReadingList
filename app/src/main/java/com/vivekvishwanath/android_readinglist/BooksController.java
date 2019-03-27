@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class BooksController {
@@ -21,5 +23,15 @@ public class BooksController {
             }
         });
         return bookView;
+    }
+
+    public static LinearLayout getBooksView (Context context) {
+        Book[] books = BookModel.getBookArray();
+        LinearLayout booksView = new LinearLayout(context);
+        booksView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        for (Book book : books) {
+            booksView.addView(buildItemView(book, context));
+        }
+        return booksView;
     }
 }
