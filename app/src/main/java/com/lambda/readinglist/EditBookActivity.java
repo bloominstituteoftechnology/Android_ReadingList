@@ -27,21 +27,35 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // search for drug by brand name
-                TextView currentTextView =findViewById (R.id.input_name);
-                sendData(currentTextView);
-
+                sendData();
             }
         });
+        findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // search for drug by brand name
+
+                sendDatatoCancel();
+            }
+        });
+
         findViewById(R.id.button_delete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // search for drug by brand name
-                TextView currentTextView =findViewById (R.id.button_delete);
-                sendDatatoDelete(currentTextView);
+
+                sendDatatoDelete();
             }
         });
 
     }
+    @Override
+    public void onBackPressed() {
+
+        sendData();
+
+    }
+
     private void receiveData(){
         etInputName=findViewById(R.id.input_name);
         etInputReason=findViewById(R.id.input_reason);
@@ -62,23 +76,34 @@ public class EditBookActivity extends AppCompatActivity {
 
     }
 
-    private void sendData(TextView tv){
+    private void sendData(){
         bookCurrent.setStrTitle( etInputName.getText().toString());
         bookCurrent.setStrReasonToRead( etInputReason.getText().toString() );
         bookCurrent.bHasBeenRead=cbHasRead.isChecked();
         bookCurrent.setStrID( etID.getText().toString() );
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("DATA", bookCurrent.toCsvString());
+        setResult( RESULT_OK );
 
-        startActivity(intent);
+        startActivityForResult(intent, 1);
+        finish();
     }
 
-    private void sendDatatoDelete(TextView tv){
+    private void sendDatatoCancel(){
         Intent intent = new Intent(context, MainActivity.class);
 
-        intent.putExtra("DATA", ",,,"+bookCurrent.getStrID());
+        intent.putExtra("DATA", ",,false,"+bookCurrent.getStrID());
+        setResult( RESULT_CANCELED );
 
-        startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
+    private void sendDatatoDelete(){
+        Intent intent = new Intent(context, MainActivity.class);
+
+        intent.putExtra("DATA", ",,false,"+bookCurrent.getStrID());
+
+        startActivityForResult(intent, 1);
     }
 }
 
