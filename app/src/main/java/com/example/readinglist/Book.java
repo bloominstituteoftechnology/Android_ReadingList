@@ -1,6 +1,8 @@
 package com.example.readinglist;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     String title;
     String reasonToRead;
     boolean hasBeenRead;

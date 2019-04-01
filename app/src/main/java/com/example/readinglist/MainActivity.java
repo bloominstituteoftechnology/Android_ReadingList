@@ -12,27 +12,20 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
+
 public class MainActivity extends AppCompatActivity {
     Context context;
-    Button addBookButton;
+    public Button addBttn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         context = this;
-
-        LinearLayout lineMan = (LinearLayout) findViewById(R.id.line_man);
-
-        Button addBttn = findViewById(R.id.add_book);
-        addBttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, EditBookActivity.class);
-                startActivityForResult(i, 0);
-            }
-        });
     }
 
     private TextView buildItemView(final Book b) {
@@ -41,7 +34,16 @@ public class MainActivity extends AppCompatActivity {
         textView.setTextColor(Color.BLACK);
         textView.setText(String.format("Title: %t ", b.getTitle()));
         return textView;
+
     }
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, EditBookActivity.class);
+                i.putExtra("KEY", "something"");
+                startActivityForResult(i, 0);
+
+            }
 
 
 
