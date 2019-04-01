@@ -1,7 +1,7 @@
 package com.lambda.readinglist;
 
 public class Book {
-    String strTitle;
+   String strTitle;
     String strReasonToRead;
     boolean bHasBeenRead;
     String strID;
@@ -17,7 +17,8 @@ public class Book {
 
     public Book(String strCSV) {
         String[] strTemp = strCSV.split( "," );
-        if (int length=strTemp.length == 4){
+        int length=strTemp.length;
+        if (length == 4){
 
             this.strTitle = strTemp[0].replace("，",",");
             this.strReasonToRead = strTemp[1].replace("，",",");
