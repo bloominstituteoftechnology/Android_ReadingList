@@ -141,3 +141,5 @@ A model, like a repository in MVVM architecture is in charge of managing the dat
 
 #### Challenge
 In your testing, find bugs and small feature improvements that can improve the polish of your app.
+
+started to work 2019/04/01
