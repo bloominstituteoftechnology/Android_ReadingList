@@ -67,12 +67,19 @@ public class EditBookActivity extends AppCompatActivity {
 
 
         String strTemp=(String) getIntent().getStringExtra(  "DATA");
-        bookCurrent=new Book(strTemp);
-        etInputName.setText(bookCurrent.getStrTitle() );
-        etInputReason.setText( bookCurrent.getStrReasonToRead() );
-        etID.setText( bookCurrent.strID );
-        cbHasRead.setChecked( bookCurrent.bHasBeenRead );
-
+        if(strTemp.equals( "")){
+            bookCurrent = new Book( ",,,new" );
+            etInputName.setText( "" );
+            etInputReason.setText( "" );
+            etID.setText( "new" );
+            cbHasRead.setChecked( bookCurrent.bHasBeenRead );
+        }else {
+            bookCurrent = new Book( strTemp );
+            etInputName.setText( bookCurrent.getStrTitle() );
+            etInputReason.setText( bookCurrent.getStrReasonToRead() );
+            etID.setText( bookCurrent.strID );
+            cbHasRead.setChecked( bookCurrent.bHasBeenRead );
+        }
 
     }
 
@@ -83,27 +90,39 @@ public class EditBookActivity extends AppCompatActivity {
         bookCurrent.setStrID( etID.getText().toString() );
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("DATA", bookCurrent.toCsvString());
-        setResult( RESULT_OK );
+        setResult( RESULT_OK,intent );
+        onActivityResult( 1, RESULT_OK ,intent);
 
-        startActivityForResult(intent, 1);
+   //     startActivityForResult(intent, 1);
         finish();
+
     }
 
     private void sendDatatoCancel(){
         Intent intent = new Intent(context, MainActivity.class);
 
         intent.putExtra("DATA", ",,false,"+bookCurrent.getStrID());
-        setResult( RESULT_CANCELED );
+        setResult( RESULT_CANCELED,intent );
 
-        startActivityForResult(intent, 1);
+        onActivityResult( 1, RESULT_CANCELED ,intent);
+
+  //      startActivityForResult(intent, 1);
+        finish();
     }
 
     private void sendDatatoDelete(){
+        bookCurrent.setStrTitle("");
+        bookCurrent.setStrReasonToRead("" );
+        bookCurrent.bHasBeenRead=cbHasRead.isChecked();
+        bookCurrent.setStrID( etID.getText().toString() );
         Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("DATA", bookCurrent.toCsvString());
+        setResult( RESULT_OK,intent );
+        onActivityResult( 1, RESULT_OK ,intent);
 
-        intent.putExtra("DATA", ",,false,"+bookCurrent.getStrID());
+        //     startActivityForResult(intent, 1);
+        finish();
 
-        startActivityForResult(intent, 1);
     }
 }
 

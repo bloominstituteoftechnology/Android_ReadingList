@@ -5,10 +5,9 @@ public class Book {
     String strReasonToRead;
     boolean bHasBeenRead;
     String strID;
-    public Book(String strTitle,
+    public Book(String strID, String strTitle,
             String strReasonToRead,
-            boolean bHasBeenRead,
-            String strID){
+            boolean bHasBeenRead ){
         this.strTitle=strTitle;
         this.strReasonToRead=strReasonToRead;
         this.bHasBeenRead= bHasBeenRead;
@@ -18,28 +17,29 @@ public class Book {
     public Book(String strCSV) {
         String[] strTemp = strCSV.split( "," );
         int length=strTemp.length;
-        if (length == 4){
-
-            this.strTitle = strTemp[0].replace("，",",");
-            this.strReasonToRead = strTemp[1].replace("，",",");
+        if (length <= 4){
+            this.strID = strTemp[0];
+            this.strTitle = strTemp[1].replace("，",",");
+            this.strReasonToRead = strTemp[2].replace("，",",");
         //     try {
-            this.bHasBeenRead = Boolean.parseBoolean( strTemp[2] );
+            this.bHasBeenRead = Boolean.parseBoolean( strTemp[3] );
         //     }catch (BootstrapMethodError e){
 //e.printStackTrace();
         //    }
-            this.strID = strTemp[3];
+
         }else {
-            for(int i=0;i<length-3;i++) {
+            this.strID = strTemp[0];
+            for(int i=1;i<length-2;i++) {
                 this.strTitle += strTemp[i];
             }
 
-            this.strReasonToRead = strTemp[length-3];
+            this.strReasonToRead = strTemp[length-2];
             //     try {
-            this.bHasBeenRead = Boolean.parseBoolean( strTemp[length-2] );
+            this.bHasBeenRead = Boolean.parseBoolean( strTemp[length-1] );
             //     }catch (BootstrapMethodError e){
 //e.printStackTrace();
             //    }
-            this.strID = strTemp[length-1];
+
         }
     }
 
@@ -80,11 +80,18 @@ public class Book {
 
             return String.format(
 
-                    "%s,%s,%b,%s",
-        this.strTitle.replace( ",","，" ), this.strReasonToRead.replace( ",","，" ), this.bHasBeenRead,this.strID
+                    "%s,%s,%s,%b"
+                    ,this.strID,this.strTitle.replace( ",","，" ), this.strReasonToRead.replace( ",","，" ), this.bHasBeenRead
 
             );
 
 
+    }
+    public void update(Book bookToBeUpdated){
+
+        this.strTitle=bookToBeUpdated.strTitle;
+        this.strReasonToRead=bookToBeUpdated.strReasonToRead;
+        this.bHasBeenRead= bookToBeUpdated.bHasBeenRead;
+        this.strID=bookToBeUpdated.strID;
     }
 }
