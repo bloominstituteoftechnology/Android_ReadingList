@@ -7,7 +7,7 @@ public class SharedPrefsDao {
 
 
     public SharedPrefsDao(){
-        int iInitialCapacity=10;
+        int iInitialCapacity=100;
         this.alBook=new ArrayList<Book>(iInitialCapacity);
 
     }
@@ -39,11 +39,16 @@ public class SharedPrefsDao {
 
     }
     public String getInitialID(){
-        if (alBook.size()==0)return "new";
+        if (alBook.size()==0){
+
+            return "new";
+        }
+
         return alBook.get(0).strID;
     }
 
     public Book bkBookByID(String strCurrentID){
+
         for(int i=0;i<this.alBook.size();i++){
             if(alBook.get(i).getStrID().equals( strCurrentID )){
                 return alBook.get( i );
@@ -63,6 +68,7 @@ public class SharedPrefsDao {
     public void updateBook(Book bookToBeUpdated){
         String strID=bookToBeUpdated.strID;
         if (strID.equals( "new" )){
+            if(bookToBeUpdated.equals( "" ))return;
             String newID="1";
             for(int i=0;i<this.alBook.size();i++){
                 if(alBook.get(i).getStrID().equals(newID)){
@@ -75,19 +81,39 @@ public class SharedPrefsDao {
 
 
             bookToBeUpdated.setStrID( newID );
-            alBook.add( bookToBeUpdated );
+            if(bookToBeUpdated.getStrTitle().equals( "" )){
+
+            }else{
+                alBook.add( bookToBeUpdated );
+
+            }
+
         }else{
-            for(int i=0;i<this.alBook.size();i++){
-                if(alBook.get( i ).getStrID().equals( strID)){
-                    if (bookToBeUpdated.getStrTitle().equals( "" )){  //delete
-                        alBook.remove( i );
-                        return;
+            if(this.alBook.size()==0){
+                if(bookToBeUpdated.getStrTitle().equals( "" )){
+                    alBook.remove( bookToBeUpdated );
+                }else{
+                    alBook.add( bookToBeUpdated );
+                }
+
+            }else{
+
+
+                for(int i=0;i<size();i++) {
+                    if (alBook.get( i ).getStrID().equals( strID )) {
+                        if (bookToBeUpdated.getStrTitle().equals( "" )) {  //delete
+                            alBook.remove( i );
+
+                        } else {
+                            alBook.get( i ).update( bookToBeUpdated );
+
+                        }
+
+
                     }else{
-                        alBook.get( i ).update(bookToBeUpdated);
-                        return;
+                     //   alBook.get( i ).update( bookToBeUpdated );
+
                     }
-
-
                 }
             }
         }

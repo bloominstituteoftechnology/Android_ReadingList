@@ -6,9 +6,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Book bookCurrent;
@@ -21,15 +29,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView( R.layout.activity_main );
         llScroll=findViewById( R.id.scrolling_view );
         spd=new SharedPrefsDao();
-
         if(this.preferences==null){
-            this.preferences = getApplicationContext().getSharedPreferences("Book", MODE_PRIVATE);
-            //test
-            spd.updateBook( new Book("new", "test,title,comma","to test comma",true  ) );
-            llScroll.addView( buildItemView(spd.bkBookByID( spd.getInitialID() ) ));
+            this.preferences = getApplicationContext().getSharedPreferences("BookRecord", MODE_PRIVATE);
+            String strRetrieved=preferences.getString(    "IDS_FOR_BOOK"     ,"" );
+            if(strRetrieved.equals( "" )){
+//test
+             //   spd.updateBook( new Book("new", "test,title,comma","to test comma",true  ) );
 
-         //   llScroll.addView( buildItemView(new Book( "test,title,comma,to test comma,true,2")));
-           // llScroll.addView( buildItemView(new Book("test title","to test",true,"3")));
+            }else{
+                String[] straTemp=          strRetrieved.split("," );
+                for(int i=0;i<straTemp.length;i++){
+                    strRetrieved=preferences.getString(    "DATA_FOR_BOOK"+straTemp[i]     ,"" );
+                    if(strRetrieved.equals( "" )){
+                        setSharedPreferences(straTemp[i],""  );
+
+                       // break;
+                    }else{
+                        Book bk=new  Book(strRetrieved);
+
+                        llScroll.addView( buildItemView(bk ) );
+                    }
+                }
+            }
+
+
+         }else{
+
+
         }
 
         findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
@@ -43,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -50,13 +77,23 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 receiveData(data);
                 llScroll.removeAllViews();
-                String strID=spd.getInitialID();
-                Book bkT=spd.bkBookByID( strID );
-                for(int i=0;i<spd.size();i++){
-                    llScroll.addView(buildItemView( bkT));
-                    String strNext=spd.getNextId( bkT.getStrID());
-                    if(strNext.equals( "" ))break;
-                    bkT=spd.bkBookByID(strNext);
+                 String strID=spd.getInitialID();
+                Book bkTemp=spd.bkBookByID( strID );
+                if(bkTemp==null){
+                    spd.updateBook( bookCurrent );
+                }
+                int size=spd.size();
+                for(int i=0;i<size;i++){
+                    llScroll.addView(buildItemView( bkTemp));
+                    String strNext=spd.getNextId( bkTemp.getStrID());
+
+                    if(strNext.equals( "" )){
+                        //bkTemp=spd.bkBookByID("new");
+                        llScroll.addView(buildItemView( bookCurrent));
+                    }else{
+                        bkTemp=spd.bkBookByID(strNext);
+
+                    }
                 }
 
             }
@@ -70,8 +107,19 @@ public class MainActivity extends AppCompatActivity {
         if(book==null)return null;
         TextView tv = new TextView( getApplicationContext() );
         bookCurrent=book;
-        tv.setText( book.toCsvString() );
-        writeSharedPreference(book.toCsvString());
+        String strTemp=book.toCsvString();
+
+        SpannableString spannable = new SpannableString(strTemp);
+        if(book.isbHasBeenRead()==true) {
+            strTemp.replace( "true","" );
+            spannable.setSpan(new StrikethroughSpan(), 0, strTemp.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+            tv.setText(spannable);
+        }else{
+            strTemp.replace( "false","" );
+            tv.setText(strTemp);
+
+        }
         tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -79,9 +127,35 @@ public class MainActivity extends AppCompatActivity {
                         sendData(currentTextView);
                     }
         });
+        spd.updateBook( book);
+        setSharedPreferences(book.strID,strTemp);
         return tv;
     }
 
+    private void setSharedPreferences(String strID,String strContent){
+        SharedPreferences.Editor editor = preferences.edit();
+        String strRetrieved=preferences.getString(    "IDS_FOR_BOOK"     ,"" );
+        if(strRetrieved.contains(strID )){
+            if(strContent.equals( "" )){
+                strRetrieved.replace( strID,"" );
+                strRetrieved.replace(",,", "," );
+                editor.putString("IDS_FOR_BOOK", strRetrieved);
+                editor.remove( "DATA_FOR_BOOK"+strID);
+            }
+        }else{
+            if(strRetrieved.equals( "" )){
+                strRetrieved=strID;
+            }else{
+                strRetrieved+=","+strID;
+            }
+
+            editor.putString("IDS_FOR_BOOK", strRetrieved);
+            editor.putString("DATA_FOR_BOOK"+strID, strContent);
+
+        }
+
+        editor.apply();
+    }
 
 
 
@@ -101,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(context, EditBookActivity.class);
-        intent.putExtra("DATA", tv.getText());
+        String strTemp=tv.getText().toString();
+        intent.putExtra("DATA", strTemp);
         startActivityForResult(intent, 1);
     }
     private void sendEmptyData(){
@@ -114,12 +189,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void receiveData(Intent intent){
-        if(bookCurrent==null)return;
+     //   if(bookCurrent==null)return;
 
         String strTemp=(String) intent.getStringExtra("DATA");
 
         if(strTemp==null)return;
         bookCurrent=new Book(strTemp);
+        setSharedPreferences( bookCurrent.strID,bookCurrent.toCsvString());
+
         spd.updateBook(bookCurrent);
         return;
 

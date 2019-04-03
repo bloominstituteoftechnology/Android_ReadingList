@@ -5,6 +5,7 @@ public class Book {
     String strReasonToRead;
     boolean bHasBeenRead;
     String strID;
+
     public Book(String strID, String strTitle,
             String strReasonToRead,
             boolean bHasBeenRead ){
