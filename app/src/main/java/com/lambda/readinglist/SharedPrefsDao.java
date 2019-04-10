@@ -65,10 +65,10 @@ public class SharedPrefsDao {
         return "Invalid ID";
     }
 
-    public void updateBook(Book bookToBeUpdated){
+    public SharedPrefsDao updateBook(Book bookToBeUpdated){
         String strID=bookToBeUpdated.strID;
         if (strID.equals( "new" )){
-            if(bookToBeUpdated.equals( "" ))return;
+            if(bookToBeUpdated.getStrTitle().equals( "" ))return this;
             String newID="1";
             for(int i=0;i<this.alBook.size();i++){
                 if(alBook.get(i).getStrID().equals(newID)){
@@ -78,27 +78,16 @@ public class SharedPrefsDao {
                     break;
                 }
             }
-
-
             bookToBeUpdated.setStrID( newID );
-            if(bookToBeUpdated.getStrTitle().equals( "" )){
-
-            }else{
-                alBook.add( bookToBeUpdated );
-
-            }
-
+            alBook.add( bookToBeUpdated );
         }else{
             if(this.alBook.size()==0){
                 if(bookToBeUpdated.getStrTitle().equals( "" )){
-                    alBook.remove( bookToBeUpdated );
+                   if (size()!=0)alBook.remove( 0);
                 }else{
                     alBook.add( bookToBeUpdated );
                 }
-
             }else{
-
-
                 for(int i=0;i<size();i++) {
                     if (alBook.get( i ).getStrID().equals( strID )) {
                         if (bookToBeUpdated.getStrTitle().equals( "" )) {  //delete
@@ -106,22 +95,16 @@ public class SharedPrefsDao {
 
                         } else {
                             alBook.get( i ).update( bookToBeUpdated );
-
                         }
-
-
                     }else{
                      //   alBook.get( i ).update( bookToBeUpdated );
-
                     }
                 }
             }
         }
-        return;
+        return this;
     }
     public int size(){
         return this.alBook.size();
     }
-
-
 }

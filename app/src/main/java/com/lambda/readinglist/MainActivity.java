@@ -1,28 +1,22 @@
 package com.lambda.readinglist;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    Book bookCurrent;
-    LinearLayout llScroll;
-    SharedPreferences preferences;
-    SharedPrefsDao spd;
+    private Book bookCurrent;
+    private LinearLayout llScroll;
+    private SharedPreferences preferences;
+    private SharedPrefsDao spd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -30,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         llScroll=findViewById( R.id.scrolling_view );
         spd=new SharedPrefsDao();
         if(this.preferences==null){
-            this.preferences = getApplicationContext().getSharedPreferences("BookRecord", MODE_PRIVATE);
+            this.preferences = getApplicationContext().getSharedPreferences("BookRecord2", MODE_PRIVATE);
             String strRetrieved=preferences.getString(    "IDS_FOR_BOOK"     ,"" );
             if(strRetrieved.equals( "" )){
 //test
@@ -80,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                  String strID=spd.getInitialID();
                 Book bkTemp=spd.bkBookByID( strID );
                 if(bkTemp==null){
-                    spd.updateBook( bookCurrent );
+                    spd=spd.updateBook(bookCurrent);
                 }
                 int size=spd.size();
                 for(int i=0;i<size;i++){
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(strNext.equals( "" )){
                         //bkTemp=spd.bkBookByID("new");
-                        llScroll.addView(buildItemView( bookCurrent));
+                     //   llScroll.addView(buildItemView( bookCurrent));
                     }else{
                         bkTemp=spd.bkBookByID(strNext);
 
@@ -108,13 +102,13 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = new TextView( getApplicationContext() );
         bookCurrent=book;
         String strTemp=book.toCsvString();
+        strTemp.replace( ",","x" );
 
-        SpannableString spannable = new SpannableString(strTemp);
+
         if(book.isbHasBeenRead()==true) {
             strTemp.replace( "true","" );
-            spannable.setSpan(new StrikethroughSpan(), 0, strTemp.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-
-            tv.setText(spannable);
+            tv.setText(strTemp);
+            tv.setPaintFlags(tv.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
         }else{
             strTemp.replace( "false","" );
             tv.setText(strTemp);
@@ -153,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("DATA_FOR_BOOK"+strID, strContent);
 
         }
-
+//editor.clear();
         editor.apply();
     }
 
@@ -176,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(context, EditBookActivity.class);
         String strTemp=tv.getText().toString();
+        int i=spd.size();
         intent.putExtra("DATA", strTemp);
         startActivityForResult(intent, 1);
     }
