@@ -30,6 +30,7 @@ public class EditBookActivity extends AppCompatActivity {
         readSwitch = findViewById(R.id.read_switch);
         saveButton = findViewById(R.id.save_button);
         cancelButton = findViewById(R.id.cancel_button);
+        //commit test
     }
 
     @Override
